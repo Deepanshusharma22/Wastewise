@@ -48,7 +48,7 @@ Dataset statistics *(generated)* are in `ml/reports/dataset_report.json` and `ml
 
 | Experiment | Architecture | Init | Notes |
 |---|---|---|---|
-| exp01_custom_cnn | 5-block CNN (conv-BN-ReLU ×2 + max-pool) | random | baseline |
+| exp01_custom_cnn | stride-2 stem + 5-block CNN (conv-BN-ReLU ×2 + max-pool) | random | baseline |
 | exp02_mobilenet_v3_large | MobileNetV3-Large | ImageNet (torchvision V2) | deployment candidate (fast on CPU) |
 | exp03_efficientnet_b0 | EfficientNet-B0 | ImageNet (torchvision V1) | accuracy reference |
 

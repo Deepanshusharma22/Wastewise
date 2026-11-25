@@ -101,9 +101,10 @@ NB03 = [
     SETUP,
     "from IPython.display import Image as Img, Markdown\n"
     "display(Markdown(Path('ml/reports/model_comparison.md').read_text()))",
+    "from ml.src.taxonomy import CATEGORIES\n"
     "evals = {p.parent.name: json.load(open(p)) for p in sorted(Path('ml/reports').glob('*/evaluation.json'))}\n"
     "for k, e in evals.items():\n"
-    "    print(k); display(pd.DataFrame(e['test']['per_class']).T.loc[e['categories']].round(3))",
+    "    print(k); display(pd.DataFrame(e['test']['per_class']).T.loc[list(CATEGORIES)].round(3))",
     "sel = json.load(open('ml/reports/model_comparison.json'))['selected']; print('selected:', sel)\n"
     "Img(f'ml/reports/{sel}/confusion_matrix.png')",
     "Img(f'ml/reports/{sel}/selective_curve.png')",

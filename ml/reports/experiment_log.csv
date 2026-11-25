@@ -1,0 +1,2 @@
+experiment_id,date,model_architecture,dataset_version,epochs,batch_size,learning_rate,optimizer,training_accuracy,validation_accuracy,test_accuracy,precision_macro,recall_macro,f1_macro,model_size_mb,inference_latency_ms,training_minutes,notes
+exp02_mobilenet_v3_large,2026-11-25,mobilenet_v3_large,v1,15,32,0.001/0.0003,AdamW,0.9965,0.9151,0.9234,0.9121,0.929,0.9192,14.13,349.1,47.6,best_epoch=15; T=0.73; threshold=0.59; coverage=0.946; OOD rejection=0.357
