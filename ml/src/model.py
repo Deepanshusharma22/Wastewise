@@ -19,7 +19,7 @@ from torchvision import models
 ARCHITECTURES = ("custom_cnn", "mobilenet_v3_large", "efficientnet_b0")
 
 PRETRAINED_FILES = {
-    # torchvision IMAGENET1K_V2 / IMAGENET1K_V1 weights, verified by SHA-256 prefix
+    # torchvision IMAGENET1K_V1 weights for both backbones (verified by SHA-256 in fetch_pretrained.sh)
     "mobilenet_v3_large": "mobilenet_v3_large-5c1a4163.pth",
     "efficientnet_b0": "efficientnet_b0_rwightman-7f5810bc.pth",
 }

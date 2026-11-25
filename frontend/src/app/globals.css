@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* WasteWise palette: forest #123D32, emerald #238B67, lime #B8E986, mist #F6F8F5 */
+:root {
+  --background: #f6f8f5;
+  --foreground: #10241e;
+  --card: #ffffff;
+  --card-foreground: #10241e;
+  --muted: #e9eee8;
+  --muted-foreground: #4f625b;
+  --primary: #238b67;
+  --primary-foreground: #ffffff;
+  --forest: #123d32;
+  --lime: #b8e986;
+  --accent: #e3f4d3;
+  --accent-foreground: #123d32;
+  --border: #d8e0d8;
+  --input: #cfd9d0;
+  --ring: #238b67;
+  --destructive: #c2410c;
+  --warning: #b45309;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #0b1a16;
+  --foreground: #e6efe9;
+  --card: #10241e;
+  --card-foreground: #e6efe9;
+  --muted: #17322a;
+  --muted-foreground: #9fb5ab;
+  --primary: #3fb48a;
+  --primary-foreground: #06140f;
+  --forest: #0f2f27;
+  --lime: #b8e986;
+  --accent: #1d3d33;
+  --accent-foreground: #d7f5b8;
+  --border: #23443a;
+  --input: #2a5044;
+  --ring: #3fb48a;
+  --destructive: #fb923c;
+  --warning: #fbbf24;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-forest: var(--forest);
+  --color-lime: var(--lime);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif;
+}
+
+@layer base {
+  * { border-color: var(--border); }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+  }
+  :lang(hi) { line-height: 1.7; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+}
+
+@keyframes ww-fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes ww-scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+.animate-fade-up { animation: ww-fade-up 0.4s ease-out both; }
+.animate-scan { animation: ww-scan 1.6s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

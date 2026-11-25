@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
+from .api.deps import mark_model_attempted
 from .api.v1 import analytics, history, predict, system
 from .config import get_settings
 from .database.supabase_client import SupabaseError, SupabaseGateway
@@ -31,6 +32,7 @@ log = logging.getLogger("wastewise")
 async def lifespan(app: FastAPI):
     s = get_settings()
     await run_in_threadpool(registry.load, s.model_dir)   # load the model exactly once per process
+    mark_model_attempted()
     http = httpx.AsyncClient(timeout=httpx.Timeout(15.0, connect=5.0),
                              limits=httpx.Limits(max_connections=50, max_keepalive_connections=20))
     app.state.gateway = (SupabaseGateway(s.supabase_url, s.supabase_anon_key, s.supabase_service_role_key, http)
