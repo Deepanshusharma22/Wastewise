@@ -1,0 +1,15 @@
+{
+  "experiment_id": "exp03_efficientnet_b0",
+  "arch": "efficientnet_b0",
+  "best": {
+    "f1_macro": 0.907831865131884,
+    "acc": 0.914175506268081,
+    "epoch": 6,
+    "train_acc": 0.9210416666666666
+  },
+  "epochs_run": 10,
+  "training_minutes": 52.3,
+  "params": 4680862,
+  "device": "cpu",
+  "checkpoint": "/home/user/Wastewise/ml/models/experiments/exp03_efficientnet_b0/best_model.pth"
+}
