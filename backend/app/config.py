@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     max_image_pixels: int = 40_000_000
     stored_image_max_side: int = 1280
     model_dir: str = str(BACKEND_DIR / "model_artifacts")
+    # Optional commit-pinned URL to fetch wastewise.onnx / gradcam_head.npz from when they are not
+    # bundled (verified against model_card.json checksums). Empty = use the bundled files only.
+    model_base_url: str = ""
     confidence_threshold_override: float | None = None
 
     # --- rate limiting -------------------------------------------------------------

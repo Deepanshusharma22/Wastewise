@@ -31,7 +31,7 @@ log = logging.getLogger("wastewise")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     s = get_settings()
-    await run_in_threadpool(registry.load, s.model_dir)   # load the model exactly once per process
+    await run_in_threadpool(registry.load, s.model_dir, s.model_base_url)   # load the model exactly once per process
     mark_model_attempted()
     http = httpx.AsyncClient(timeout=httpx.Timeout(15.0, connect=5.0),
                              limits=httpx.Limits(max_connections=50, max_keepalive_connections=20))

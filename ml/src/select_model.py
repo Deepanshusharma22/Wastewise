@@ -185,6 +185,7 @@ def main() -> None:
         "exported_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "runtime": "onnxruntime (CPU)",
         "onnx_sha256": sha256(onnx_path),
+        "gradcam_head_sha256": sha256(ARTIFACTS / "gradcam_head.npz"),
         "categories": ckpt["categories"],
         "items": ckpt["items"],
         "item_to_category": ckpt["item_to_category"],

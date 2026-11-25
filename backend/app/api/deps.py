@@ -24,7 +24,7 @@ def ensure_model_loaded(settings: Settings) -> None:
         return
     with _init_lock:
         if registry.model is None and not _model_attempted:
-            registry.load(settings.model_dir)
+            registry.load(settings.model_dir, settings.model_base_url)
             _model_attempted = True
 
 
