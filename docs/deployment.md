@@ -77,3 +77,36 @@ cd backend && pytest                                               # includes re
 ```
 
 Then commit `backend/model_artifacts/` and `ml/models/best_model.pth`, and redeploy the API.
+
+## Live deployment (v1)
+
+| Part | URL |
+|---|---|
+| Web app | https://wastewise-three-lilac.vercel.app (alias: `wastewise-madhurchaudhary65-7604s-projects.vercel.app`) |
+| API | see the `wastewise-api` project (URL recorded below once deployed) |
+
+Supabase auth is set up as follows:
+
+* `site_url` = `https://wastewise-three-lilac.vercel.app`.
+* `uri_allow_list` = `<web>/auth/callback**` for both production aliases plus `http://localhost:3000/auth/callback**`.
+
+### How v1 is deployed: file upload with pinned sources
+
+The Vercel projects are **not linked to GitHub** yet. Linking needs a GitHub *Login Connection* on the Vercel account, and Vercel's anonymous GitHub fetches were rate-limited. Instead, `scripts/make_vercel_deploy.py` generates a few small bootstrap files in `deploy/vercel/{web,api}/`. These files are committed and reviewable, and they are uploaded with the Vercel deployments API:
+
+* **web.** `fetch_source.sh` downloads the `frontend/` sources of one **pinned commit** from `codeload.github.com`. After that, `npm ci` and `next build` run normally, using the committed `package-lock.json`.
+* **api.** `api/index.py` downloads a **GitHub release bundle**. The bundle is `git archive` of `backend/` at the release commit, including `model_artifacts/`. The script checks the bundle's **SHA-256**, extracts it to `/tmp` once per instance, and imports `app.main:app`. When the model files are loaded, they are checked again against the checksums in `model_card.json`.
+
+Redeploying:
+
+```bash
+# web: after pushing the commit you want live
+python scripts/make_vercel_deploy.py web --sha $(git rev-parse HEAD)
+# api: build + publish a bundle, then generate the entry point
+git archive --format=tar.gz -o wastewise-api-<ver>.tar.gz HEAD backend
+gh release upload <tag> wastewise-api-<ver>.tar.gz
+python scripts/make_vercel_deploy.py api --bundle-url <asset url> --bundle-sha256 $(sha256sum wastewise-api-<ver>.tar.gz | cut -d' ' -f1)
+# upload deploy/vercel/<target>/* as a production deployment (Vercel dashboard, CLI `vercel deploy --prod`, or API)
+```
+
+Once GitHub is connected in Vercel (Account Settings → Login Connections, then Project → Settings → Git), switch to normal Git deployments. Use root directory `frontend/` for `wastewise` and `backend/` for `wastewise-api`; `backend/vercel.json` and `backend/api/index.py` are already set up for that. After the switch, `deploy/vercel/` is no longer needed.
