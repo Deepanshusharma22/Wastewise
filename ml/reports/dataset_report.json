@@ -1,0 +1,281 @@
+{
+  "dataset_version": "v1",
+  "created_at": "2026-11-25T16:44:32Z",
+  "params": {
+    "raw_dir": "<raw>",
+    "out_dir": "<processed>",
+    "per_category": 1100,
+    "ood_per_folder": 60,
+    "val_frac": 0.15,
+    "test_frac": 0.15,
+    "group_threshold": 0.97,
+    "collapse_threshold": 0.99,
+    "seed": 42,
+    "workers": 2
+  },
+  "sources": {
+    "trashnet": {
+      "name": "TrashNet (Thung & Yang, 2016)",
+      "url": "https://github.com/garythung/trashnet",
+      "license": "MIT",
+      "fetch": "https://codeload.github.com/garythung/trashnet/tar.gz/master"
+    },
+    "garbage12": {
+      "name": "Garbage Classification (12 classes), Mostafa Mohamed (Kaggle)",
+      "url": "https://www.kaggle.com/datasets/mostafaabla/garbage-classification",
+      "license": "ODbL 1.0 (database); image contents (c) original authors, research/education use",
+      "fetch": "https://codeload.github.com/aesopdev/garbage_classification_model_smam/tar.gz/HEAD (GitHub mirror, folder extra/large_garb_dataset)"
+    },
+    "household30": {
+      "name": "Recyclable and Household Waste Classification, Alistair King (Kaggle)",
+      "url": "https://www.kaggle.com/datasets/alistairking/recyclable-and-household-waste-classification",
+      "license": "MIT (Kaggle listing); dataset card: educational, research and non-commercial use, citation required",
+      "fetch": "https://codeload.github.com/AyushKumarSD/Recyclable-and-Household-Waste-Classification/tar.gz/HEAD (GitHub mirror)"
+    },
+    "ewastenet": {
+      "name": "E-Waste Vision Dataset (EWasteNet, Islam et al.)",
+      "url": "https://github.com/NifulIslam/EWasteNet-A-Two-Stream-DeiT-Approach-for-E-Waste-Classification",
+      "license": "No explicit license in repository \u2014 academic use with citation",
+      "fetch": "https://codeload.github.com/NifulIslam/EWasteNet-A-Two-Stream-DeiT-Approach-for-E-Waste-Classification/tar.gz/HEAD"
+    }
+  },
+  "raw_folder_counts": {
+    "trashnet/data/dataset-resized/cardboard": 403,
+    "trashnet/data/dataset-resized/paper": 594,
+    "trashnet/data/dataset-resized/plastic": 482,
+    "trashnet/data/dataset-resized/metal": 410,
+    "trashnet/data/dataset-resized/glass": 501,
+    "trashnet/data/dataset-resized/trash": 137,
+    "garbage12_mirror/extra/large_garb_dataset/biological": 985,
+    "garbage12_mirror/extra/large_garb_dataset/cardboard": 891,
+    "garbage12_mirror/extra/large_garb_dataset/paper": 1050,
+    "garbage12_mirror/extra/large_garb_dataset/plastic": 865,
+    "garbage12_mirror/extra/large_garb_dataset/metal": 769,
+    "garbage12_mirror/extra/large_garb_dataset/brown-glass": 607,
+    "garbage12_mirror/extra/large_garb_dataset/green-glass": 629,
+    "garbage12_mirror/extra/large_garb_dataset/white-glass": 775,
+    "garbage12_mirror/extra/large_garb_dataset/battery": 945,
+    "garbage12_mirror/extra/large_garb_dataset/clothes": 5325,
+    "garbage12_mirror/extra/large_garb_dataset/shoes": 1977,
+    "garbage12_mirror/extra/large_garb_dataset/trash": 697,
+    "household30/images/food_waste/default": 250,
+    "household30/images/food_waste/real_world": 250,
+    "household30/images/eggshells/default": 250,
+    "household30/images/eggshells/real_world": 250,
+    "household30/images/coffee_grounds/default": 250,
+    "household30/images/coffee_grounds/real_world": 250,
+    "household30/images/tea_bags/default": 250,
+    "household30/images/tea_bags/real_world": 250,
+    "household30/images/cardboard_boxes/default": 250,
+    "household30/images/cardboard_boxes/real_world": 250,
+    "household30/images/cardboard_packaging/default": 250,
+    "household30/images/cardboard_packaging/real_world": 250,
+    "household30/images/magazines/default": 250,
+    "household30/images/magazines/real_world": 250,
+    "household30/images/newspaper/default": 250,
+    "household30/images/newspaper/real_world": 250,
+    "household30/images/office_paper/default": 250,
+    "household30/images/office_paper/real_world": 250,
+    "household30/images/plastic_water_bottles/default": 250,
+    "household30/images/plastic_water_bottles/real_world": 250,
+    "household30/images/plastic_soda_bottles/default": 250,
+    "household30/images/plastic_soda_bottles/real_world": 250,
+    "household30/images/plastic_detergent_bottles/default": 250,
+    "household30/images/plastic_detergent_bottles/real_world": 250,
+    "household30/images/plastic_food_containers/default": 250,
+    "household30/images/plastic_food_containers/real_world": 250,
+    "household30/images/plastic_shopping_bags/default": 250,
+    "household30/images/plastic_shopping_bags/real_world": 250,
+    "household30/images/plastic_trash_bags/default": 250,
+    "household30/images/plastic_trash_bags/real_world": 250,
+    "household30/images/disposable_plastic_cutlery/default": 250,
+    "household30/images/disposable_plastic_cutlery/real_world": 250,
+    "household30/images/plastic_straws/default": 250,
+    "household30/images/plastic_straws/real_world": 250,
+    "household30/images/plastic_cup_lids/default": 250,
+    "household30/images/plastic_cup_lids/real_world": 250,
+    "household30/images/styrofoam_cups/default": 250,
+    "household30/images/styrofoam_cups/real_world": 250,
+    "household30/images/styrofoam_food_containers/default": 250,
+    "household30/images/styrofoam_food_containers/real_world": 250,
+    "household30/images/aluminum_soda_cans/default": 250,
+    "household30/images/aluminum_soda_cans/real_world": 250,
+    "household30/images/aluminum_food_cans/default": 250,
+    "household30/images/aluminum_food_cans/real_world": 250,
+    "household30/images/steel_food_cans/default": 250,
+    "household30/images/steel_food_cans/real_world": 250,
+    "household30/images/glass_beverage_bottles/default": 250,
+    "household30/images/glass_beverage_bottles/real_world": 250,
+    "household30/images/glass_food_jars/default": 250,
+    "household30/images/glass_food_jars/real_world": 250,
+    "household30/images/glass_cosmetic_containers/default": 250,
+    "household30/images/glass_cosmetic_containers/real_world": 250,
+    "household30/images/aerosol_cans/default": 250,
+    "household30/images/aerosol_cans/real_world": 250,
+    "household30/images/paper_cups/default": 250,
+    "household30/images/paper_cups/real_world": 250,
+    "household30/images/clothing/default": 250,
+    "household30/images/clothing/real_world": 250,
+    "household30/images/shoes/default": 250,
+    "household30/images/shoes/real_world": 250,
+    "ewastenet/dataset/Mobile": 152,
+    "ewastenet/dataset/laptop": 117,
+    "ewastenet/dataset/Keyboards": 110,
+    "ewastenet/dataset/Mouses": 104,
+    "ewastenet/dataset/TV": 131,
+    "ewastenet/dataset/camera": 62,
+    "ewastenet/dataset/microwave": 102,
+    "ewastenet/dataset/smartwatch": 100
+  },
+  "raw_total_in_taxonomy": 24284,
+  "corrupted": [],
+  "exact_duplicates_removed": 6014,
+  "exact_duplicate_label_conflicts_dropped": 82,
+  "near_duplicate_method": "32x32 grayscale thumbnail correlation + 4x4 colour layout",
+  "near_duplicate_pairs": 2995,
+  "near_duplicate_groups": 1300,
+  "near_duplicate_largest_group": 18,
+  "near_duplicate_cross_dataset_groups": 15,
+  "near_duplicate_images_collapsed": 1687,
+  "near_duplicate_label_conflicts_dropped": 59,
+  "available_after_cleaning_per_category": {
+    "organic": 2167,
+    "paper_cardboard": 3676,
+    "plastic": 4109,
+    "metal": 1652,
+    "glass": 2925,
+    "e_waste": 1781,
+    "hazardous": 285
+  },
+  "sampled_per_category": {
+    "organic": 1100,
+    "paper_cardboard": 1100,
+    "plastic": 1100,
+    "metal": 1100,
+    "glass": 1100,
+    "e_waste": 1100,
+    "hazardous": 285
+  },
+  "split_counts": {
+    "organic": {
+      "train": 770,
+      "validation": 165,
+      "test": 165
+    },
+    "paper_cardboard": {
+      "train": 763,
+      "validation": 169,
+      "test": 168
+    },
+    "plastic": {
+      "train": 762,
+      "validation": 170,
+      "test": 168
+    },
+    "metal": {
+      "train": 772,
+      "validation": 163,
+      "test": 165
+    },
+    "glass": {
+      "train": 767,
+      "validation": 165,
+      "test": 168
+    },
+    "e_waste": {
+      "train": 771,
+      "validation": 162,
+      "test": 167
+    },
+    "hazardous": {
+      "train": 199,
+      "validation": 43,
+      "test": 43
+    }
+  },
+  "split_totals": {
+    "test": 1044,
+    "train": 4804,
+    "validation": 1037
+  },
+  "per_dataset_per_category": {
+    "organic": {
+      "garbage12": 145,
+      "household30": 955
+    },
+    "paper_cardboard": {
+      "garbage12": 158,
+      "household30": 786,
+      "trashnet": 156
+    },
+    "plastic": {
+      "garbage12": 46,
+      "household30": 1009,
+      "trashnet": 45
+    },
+    "metal": {
+      "garbage12": 161,
+      "household30": 778,
+      "trashnet": 161
+    },
+    "glass": {
+      "garbage12": 362,
+      "household30": 618,
+      "trashnet": 120
+    },
+    "e_waste": {
+      "ewastenet": 841,
+      "garbage12": 259
+    },
+    "hazardous": {
+      "household30": 285
+    }
+  },
+  "item_counts": {
+    "aluminium_can": 558,
+    "cardboard": 473,
+    "glass_jar_container": 419,
+    "newspaper_magazine": 314,
+    "aerosol_can": 285,
+    "plastic_bottle": 276,
+    "tea_bags": 275,
+    "eggshells": 260,
+    "battery": 259,
+    "coffee_grounds": 230,
+    "steel_food_can": 220,
+    "glass_bottle": 199,
+    "food_waste": 190,
+    "plastic_cutlery_straw": 184,
+    "plastic_bag": 184,
+    "styrofoam": 181,
+    "office_paper": 156,
+    "mobile_phone": 149,
+    "television": 126,
+    "keyboard": 107,
+    "laptop": 106,
+    "computer_mouse": 102,
+    "microwave": 97,
+    "smartwatch": 96,
+    "plastic_cup_lid": 92,
+    "plastic_food_container": 92,
+    "camera": 58
+  },
+  "items_unlabelled": 1197,
+  "imbalance_ratio_max_min": 3.8596491228070176,
+  "ood_counts": {
+    "garbage12_mirror/extra/large_garb_dataset/clothes": 60,
+    "garbage12_mirror/extra/large_garb_dataset/shoes": 60,
+    "garbage12_mirror/extra/large_garb_dataset/trash": 60,
+    "household30/images/clothing/default": 60,
+    "household30/images/clothing/real_world": 60,
+    "household30/images/paper_cups/default": 60,
+    "household30/images/paper_cups/real_world": 60,
+    "household30/images/shoes/default": 60,
+    "household30/images/shoes/real_world": 60,
+    "trashnet/data/dataset-resized/trash": 60
+  },
+  "image_size_stats": {
+    "min_side_min": 88,
+    "min_side_median": 256.0
+  }
+}

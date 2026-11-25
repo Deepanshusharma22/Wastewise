@@ -1,0 +1,328 @@
+{
+  "version": "1.0.0",
+  "note": "Canonical WasteWise knowledge base. Edit here, then run `python scripts/sync_shared.py` to copy into backend/ and frontend/. Guidance follows the principles of India's Solid Waste Management Rules 2016 (source segregation into wet, dry and domestic hazardous streams), E-Waste (Management) Rules 2022 and Battery Waste Management Rules 2022. Local municipal rules may differ - always follow your local body's instructions.",
+  "categories": {
+    "organic": {
+      "color": "#5BAA3C",
+      "icon": "leaf",
+      "bin": "green",
+      "recyclable": "compostable",
+      "name": {"en": "Organic Waste", "hi": "जैविक कचरा"},
+      "short": {"en": "Food scraps, peels and garden waste that break down naturally.", "hi": "खाने के बचे हिस्से, छिलके और बगीचे का कचरा जो प्राकृतिक रूप से सड़ जाता है।"},
+      "description": {
+        "en": "Biodegradable (wet) waste from kitchens and gardens. It decomposes naturally and can be turned into compost or biogas instead of being sent to a landfill, where it produces methane.",
+        "hi": "रसोई और बगीचे से निकलने वाला जैव-निम्नीकरणीय (गीला) कचरा। यह प्राकृतिक रूप से विघटित होता है और लैंडफिल में भेजने के बजाय इससे खाद या बायोगैस बनाई जा सकती है, क्योंकि लैंडफिल में यह मीथेन गैस पैदा करता है।"
+      },
+      "examples": {
+        "en": ["Vegetable and fruit peels", "Leftover rice, roti and dal", "Used tea leaves and coffee grounds", "Eggshells", "Flowers from pooja", "Dry leaves and garden trimmings"],
+        "hi": ["सब्ज़ी और फलों के छिलके", "बचा हुआ चावल, रोटी और दाल", "इस्तेमाल की हुई चायपत्ती और कॉफ़ी", "अंडे के छिलके", "पूजा के फूल", "सूखी पत्तियाँ और बगीचे की कटाई"]
+      },
+      "segregation": {
+        "en": ["Put it in the green (wet waste) bin.", "Keep plastic bags, foil and rubber bands out of wet waste.", "Drain excess liquid before disposal to avoid smell and leaks."],
+        "hi": ["इसे हरे (गीले कचरे) डिब्बे में डालें।", "गीले कचरे में प्लास्टिक की थैलियाँ, फ़ॉइल और रबर बैंड न डालें।", "बदबू और रिसाव से बचने के लिए अतिरिक्त पानी निकाल दें।"]
+      },
+      "disposal": {
+        "en": ["Compost at home (pot, bin or pit composting) if you can.", "Otherwise hand it over separately to the municipal wet-waste collection.", "Community or society composters and biogas units are good options for apartments."],
+        "hi": ["हो सके तो घर पर खाद बनाएँ (गमले, डिब्बे या गड्ढे में)।", "अन्यथा इसे नगर निकाय के गीले कचरे के संग्रह में अलग से दें।", "अपार्टमेंट के लिए सोसायटी कम्पोस्टर और बायोगैस इकाइयाँ अच्छे विकल्प हैं।"]
+      },
+      "recycling": {
+        "en": ["Composting turns it into nutrient-rich manure for plants.", "Biogas plants convert it into cooking gas and slurry fertiliser."],
+        "hi": ["खाद बनाने से यह पौधों के लिए पोषक खाद बन जाता है।", "बायोगैस संयंत्र इसे खाना पकाने की गैस और खाद में बदलते हैं।"]
+      },
+      "safety": {
+        "en": ["Wash hands after handling spoiled food.", "Do not compost meat or oily food in open pits - it attracts animals.", "Keep the bin covered to avoid flies and mosquitoes."],
+        "hi": ["खराब खाना छूने के बाद हाथ धोएँ।", "खुले गड्ढे में मांस या तैलीय खाना न डालें - इससे जानवर आकर्षित होते हैं।", "मक्खियों और मच्छरों से बचने के लिए डिब्बा ढककर रखें।"]
+      },
+      "common_mistakes": {
+        "en": ["Throwing wet waste inside a plastic bag.", "Mixing it with dry recyclables, which makes paper and plastic dirty and unrecyclable.", "Adding diapers or sanitary waste to compost."],
+        "hi": ["गीला कचरा प्लास्टिक की थैली में बाँधकर फेंकना।", "इसे सूखे रीसायकल योग्य कचरे में मिलाना, जिससे कागज़ और प्लास्टिक गंदे होकर रीसायकल नहीं हो पाते।", "डायपर या सैनिटरी कचरा खाद में डालना।"]
+      },
+      "environment": {
+        "en": "Organic waste in landfills decomposes without oxygen and releases methane, a potent greenhouse gas. Composting avoids this and returns nutrients to the soil.",
+        "hi": "लैंडफिल में जैविक कचरा बिना ऑक्सीजन के सड़कर मीथेन छोड़ता है, जो एक शक्तिशाली ग्रीनहाउस गैस है। खाद बनाने से यह रुकता है और मिट्टी को पोषक तत्व वापस मिलते हैं।"
+      }
+    },
+    "paper_cardboard": {
+      "color": "#C8955A",
+      "icon": "newspaper",
+      "bin": "blue",
+      "recyclable": "yes",
+      "name": {"en": "Paper & Cardboard", "hi": "कागज़ और गत्ता"},
+      "short": {"en": "Newspapers, boxes, sheets and paper packaging.", "hi": "अख़बार, डिब्बे, काग़ज़ और काग़ज़ की पैकेजिंग।"},
+      "description": {
+        "en": "Dry, fibre-based waste. Clean and dry paper and cardboard are among the most widely recycled materials in India, and the kabadiwala network buys most of it.",
+        "hi": "सूखा, रेशे से बना कचरा। साफ़ और सूखा कागज़ व गत्ता भारत में सबसे ज़्यादा रीसायकल होने वाली सामग्रियों में से है और कबाड़ीवाले इसका अधिकांश हिस्सा खरीद लेते हैं।"
+      },
+      "examples": {
+        "en": ["Old newspapers and magazines", "Cardboard boxes from online deliveries", "Notebooks and printer paper", "Paper bags and cartons", "Cereal and shoe boxes"],
+        "hi": ["पुराने अख़बार और पत्रिकाएँ", "ऑनलाइन डिलीवरी के गत्ते के डिब्बे", "कॉपियाँ और प्रिंटर काग़ज़", "काग़ज़ की थैलियाँ और कार्टन", "अनाज और जूतों के डिब्बे"]
+      },
+      "segregation": {
+        "en": ["Put it in the blue (dry waste) bin or keep it for the kabadiwala.", "Keep it dry and free of food stains and oil.", "Flatten boxes to save space; remove plastic tape where easy."],
+        "hi": ["इसे नीले (सूखे कचरे) डिब्बे में डालें या कबाड़ीवाले के लिए रखें।", "इसे सूखा और खाने व तेल के दाग़ से मुक्त रखें।", "जगह बचाने के लिए डिब्बे चपटे करें; आसानी से हो तो प्लास्टिक टेप हटा दें।"]
+      },
+      "disposal": {
+        "en": ["Sell to a kabadiwala or give to a dry-waste collection centre.", "Greasy pizza boxes or food-soiled paper go to wet waste or general waste instead."],
+        "hi": ["कबाड़ीवाले को बेचें या सूखा कचरा संग्रह केंद्र को दें।", "चिकने पिज़्ज़ा डिब्बे या खाने से गंदा काग़ज़ गीले या सामान्य कचरे में डालें।"]
+      },
+      "recycling": {
+        "en": ["Recycled into new paper, newsprint, tissue and corrugated boxes.", "Paper fibres can be recycled several times before they become too short."],
+        "hi": ["इससे नया काग़ज़, अख़बारी काग़ज़, टिश्यू और गत्ते के डिब्बे बनते हैं।", "काग़ज़ के रेशे बहुत छोटे होने से पहले कई बार रीसायकल हो सकते हैं।"]
+      },
+      "safety": {
+        "en": ["Generally safe to handle.", "Watch out for staples and box-cutter blades when flattening cartons."],
+        "hi": ["आमतौर पर छूने में सुरक्षित।", "डिब्बे चपटे करते समय स्टेपल और कटर के ब्लेड से सावधान रहें।"]
+      },
+      "common_mistakes": {
+        "en": ["Putting wet or oily paper in the recycling.", "Assuming paper cups are plain paper - most have a plastic lining.", "Shredding paper into tiny pieces that sorting facilities cannot handle."],
+        "hi": ["गीला या तैलीय काग़ज़ रीसायकल में डालना।", "काग़ज़ के कपों को सादा काग़ज़ समझना - अधिकतर में प्लास्टिक की परत होती है।", "काग़ज़ को इतने छोटे टुकड़ों में फाड़ना कि छँटाई केंद्र उसे संभाल न सकें।"]
+      },
+      "environment": {
+        "en": "Recycling paper reduces demand for virgin wood pulp and the water and energy used to make new paper.",
+        "hi": "काग़ज़ रीसायकल करने से नई लकड़ी की लुगदी और नया काग़ज़ बनाने में लगने वाले पानी व ऊर्जा की माँग कम होती है।"
+      }
+    },
+    "plastic": {
+      "color": "#3B8FD9",
+      "icon": "cup-soda",
+      "bin": "blue",
+      "recyclable": "conditional",
+      "name": {"en": "Plastic Waste", "hi": "प्लास्टिक कचरा"},
+      "short": {"en": "Bottles, containers, wrappers and plastic packaging.", "hi": "बोतलें, डिब्बे, रैपर और प्लास्टिक पैकेजिंग।"},
+      "description": {
+        "en": "Dry, non-biodegradable waste. Rigid plastics like PET bottles and HDPE containers are widely recycled; thin films, multi-layer wrappers and styrofoam are much harder to recycle.",
+        "hi": "सूखा, जैव-अनिम्नीकरणीय कचरा। PET बोतलें और HDPE डिब्बे जैसे कठोर प्लास्टिक आसानी से रीसायकल होते हैं; पतली फ़िल्म, बहु-परत रैपर और थर्मोकोल को रीसायकल करना कहीं ज़्यादा कठिन है।"
+      },
+      "examples": {
+        "en": ["Water and cold-drink bottles", "Milk pouches", "Shampoo and detergent bottles", "Food containers and tiffin boxes", "Chips and biscuit wrappers", "Carry bags and straws"],
+        "hi": ["पानी और कोल्ड ड्रिंक की बोतलें", "दूध की थैलियाँ", "शैम्पू और डिटर्जेंट की बोतलें", "खाने के डिब्बे और टिफ़िन", "चिप्स और बिस्कुट के रैपर", "कैरी बैग और स्ट्रॉ"]
+      },
+      "segregation": {
+        "en": ["Rinse and dry, then put it in the blue (dry waste) bin.", "Cut milk pouches fully open and rinse them.", "Keep wrappers and films together so collectors can bundle them."],
+        "hi": ["धोकर सुखाएँ, फिर नीले (सूखे कचरे) डिब्बे में डालें।", "दूध की थैलियों को पूरा खोलकर धो लें।", "रैपर और फ़िल्म को एक साथ रखें ताकि संग्रहकर्ता उन्हें बाँध सकें।"]
+      },
+      "disposal": {
+        "en": ["Give clean bottles, containers and milk pouches to a kabadiwala or dry-waste collector.", "Drop multi-layer wrappers at collection points run by your municipality or producers (EPR take-back) where available.", "Never burn plastic."],
+        "hi": ["साफ़ बोतलें, डिब्बे और दूध की थैलियाँ कबाड़ीवाले या सूखा कचरा संग्रहकर्ता को दें।", "जहाँ उपलब्ध हो, बहु-परत रैपर नगर निकाय या उत्पादकों (EPR वापसी) के संग्रह केंद्रों पर दें।", "प्लास्टिक को कभी न जलाएँ।"]
+      },
+      "recycling": {
+        "en": ["PET bottles become polyester fibre, strapping and new bottles.", "HDPE and PP containers are recycled into pipes, buckets and crates.", "Low-value plastics may go to co-processing in cement kilns."],
+        "hi": ["PET बोतलों से पॉलिएस्टर रेशा, पट्टियाँ और नई बोतलें बनती हैं।", "HDPE और PP डिब्बों से पाइप, बाल्टियाँ और क्रेट बनते हैं।", "कम मूल्य वाले प्लास्टिक सीमेंट भट्टों में को-प्रोसेसिंग के लिए जा सकते हैं।"]
+      },
+      "safety": {
+        "en": ["Burning plastic releases toxic fumes - never burn it.", "Do not reuse containers that held chemicals or pesticides for food or water."],
+        "hi": ["प्लास्टिक जलाने से ज़हरीला धुआँ निकलता है - इसे कभी न जलाएँ।", "जिन डिब्बों में रसायन या कीटनाशक रहे हों, उन्हें खाने या पानी के लिए दोबारा इस्तेमाल न करें।"]
+      },
+      "common_mistakes": {
+        "en": ["Leaving food or liquid inside containers.", "Putting plastic bags into the wet-waste bin.", "Treating all plastics as equally recyclable."],
+        "hi": ["डिब्बों के अंदर खाना या तरल छोड़ देना।", "प्लास्टिक की थैलियाँ गीले कचरे के डिब्बे में डालना।", "सभी प्लास्टिक को समान रूप से रीसायकल योग्य मानना।"]
+      },
+      "environment": {
+        "en": "Plastic persists in the environment for a very long time, breaks into microplastics and clogs drains. Clean segregation is what makes recycling possible.",
+        "hi": "प्लास्टिक पर्यावरण में बहुत लंबे समय तक रहता है, माइक्रोप्लास्टिक में टूटता है और नालियाँ जाम करता है। साफ़ छँटाई से ही रीसाइक्लिंग संभव होती है।"
+      }
+    },
+    "metal": {
+      "color": "#8A97A6",
+      "icon": "cylinder",
+      "bin": "blue",
+      "recyclable": "yes",
+      "name": {"en": "Metal Waste", "hi": "धातु कचरा"},
+      "short": {"en": "Aluminium cans, tins, steel objects and scrap metal.", "hi": "एल्युमिनियम कैन, टिन, स्टील की वस्तुएँ और कबाड़ धातु।"},
+      "description": {
+        "en": "Dry waste made of aluminium, steel, iron or copper. Metals can be recycled repeatedly without losing quality and have good resale value.",
+        "hi": "एल्युमिनियम, स्टील, लोहे या तांबे से बना सूखा कचरा। धातुएँ गुणवत्ता खोए बिना बार-बार रीसायकल हो सकती हैं और इनकी अच्छी बिक्री कीमत होती है।"
+      },
+      "examples": {
+        "en": ["Cold-drink and beer cans", "Tins of ghee, oil or sweets", "Old steel utensils", "Bottle caps and foil trays", "Broken iron tools"],
+        "hi": ["कोल्ड ड्रिंक और बियर के कैन", "घी, तेल या मिठाई के टिन", "पुराने स्टील के बर्तन", "बोतल के ढक्कन और फ़ॉइल ट्रे", "टूटे लोहे के औज़ार"]
+      },
+      "segregation": {
+        "en": ["Rinse cans and tins, then put them in the blue (dry waste) bin.", "Keep larger scrap separate for the kabadiwala.", "Never put aerosol cans with ordinary metal - see Hazardous Waste."],
+        "hi": ["कैन और टिन धोकर नीले (सूखे कचरे) डिब्बे में डालें।", "बड़ा कबाड़ कबाड़ीवाले के लिए अलग रखें।", "एरोसोल कैन को सामान्य धातु के साथ न रखें - खतरनाक कचरा देखें।"]
+      },
+      "disposal": {
+        "en": ["Sell to a scrap dealer or kabadiwala.", "Hand small items to the dry-waste collection."],
+        "hi": ["कबाड़ी या कबाड़ीवाले को बेचें।", "छोटी चीज़ें सूखा कचरा संग्रह में दें।"]
+      },
+      "recycling": {
+        "en": ["Melted and re-cast into new cans, sheets, rods and machine parts.", "Recycling aluminium needs far less energy than producing it from ore."],
+        "hi": ["पिघलाकर नए कैन, चादरें, छड़ें और मशीन के पुर्ज़े बनाए जाते हैं।", "एल्युमिनियम रीसायकल करने में अयस्क से बनाने की तुलना में बहुत कम ऊर्जा लगती है।"]
+      },
+      "safety": {
+        "en": ["Sharp edges of opened tins can cut - press lids inward or wrap them.", "Wear gloves when handling rusty scrap."],
+        "hi": ["खुले टिन के धारदार किनारे काट सकते हैं - ढक्कन अंदर दबाएँ या लपेट दें।", "जंग लगा कबाड़ उठाते समय दस्ताने पहनें।"]
+      },
+      "common_mistakes": {
+        "en": ["Leaving food residue inside tins.", "Mixing pressurised aerosol cans with regular metal scrap.", "Throwing small metal items into wet waste."],
+        "hi": ["टिन के अंदर खाने के अवशेष छोड़ना।", "दबाव वाले एरोसोल कैन को सामान्य धातु कबाड़ में मिलाना।", "छोटी धातु की चीज़ें गीले कचरे में फेंकना।"]
+      },
+      "environment": {
+        "en": "Recycling metals reduces mining, saves energy and keeps valuable material in use.",
+        "hi": "धातुओं के रीसायकल से खनन कम होता है, ऊर्जा बचती है और मूल्यवान सामग्री उपयोग में बनी रहती है।"
+      }
+    },
+    "glass": {
+      "color": "#2FB5A8",
+      "icon": "wine",
+      "bin": "blue",
+      "recyclable": "yes",
+      "name": {"en": "Glass Waste", "hi": "काँच का कचरा"},
+      "short": {"en": "Glass bottles, jars and containers.", "hi": "काँच की बोतलें, जार और डिब्बे।"},
+      "description": {
+        "en": "Dry waste made of glass. Container glass can be recycled endlessly. Window glass, mirrors, bulbs and ceramics are different materials and should not be mixed with bottles and jars.",
+        "hi": "काँच से बना सूखा कचरा। डिब्बों का काँच अनंत बार रीसायकल हो सकता है। खिड़की का काँच, आईना, बल्ब और चीनी मिट्टी अलग सामग्री हैं और इन्हें बोतलों व जार के साथ नहीं मिलाना चाहिए।"
+      },
+      "examples": {
+        "en": ["Pickle and jam jars", "Sauce and ketchup bottles", "Beverage bottles", "Glass cosmetic and medicine bottles (empty)"],
+        "hi": ["अचार और जैम के जार", "सॉस और केचप की बोतलें", "पेय पदार्थों की बोतलें", "काँच की कॉस्मेटिक और दवा की बोतलें (खाली)"]
+      },
+      "segregation": {
+        "en": ["Empty and rinse, then keep it separately or in the blue (dry waste) bin.", "Keep bottles whole - intact glass is easier and safer to recycle.", "Remove metal or plastic caps."],
+        "hi": ["खाली करके धोएँ, फिर अलग या नीले (सूखे कचरे) डिब्बे में रखें।", "बोतलें साबुत रखें - साबुत काँच रीसायकल करना आसान और सुरक्षित है।", "धातु या प्लास्टिक के ढक्कन हटा दें।"]
+      },
+      "disposal": {
+        "en": ["Sell bottles to a kabadiwala or return them where deposit schemes exist.", "Wrap broken glass in thick paper, label it 'broken glass' and hand it over separately."],
+        "hi": ["बोतलें कबाड़ीवाले को बेचें या जहाँ जमा-वापसी योजना हो वहाँ लौटाएँ।", "टूटे काँच को मोटे काग़ज़ में लपेटें, 'टूटा काँच' लिखें और अलग से दें।"]
+      },
+      "recycling": {
+        "en": ["Crushed into cullet and melted into new bottles and jars.", "Clean bottles are often washed and reused directly by bottlers."],
+        "hi": ["तोड़कर कलेट बनाया जाता है और पिघलाकर नई बोतलें व जार बनाए जाते हैं।", "साफ़ बोतलें अक्सर धोकर सीधे दोबारा इस्तेमाल की जाती हैं।"]
+      },
+      "safety": {
+        "en": ["Handle broken glass with gloves or thick cloth.", "Never put broken glass loose in a bag - it injures sanitation workers."],
+        "hi": ["टूटा काँच दस्ताने या मोटे कपड़े से उठाएँ।", "टूटा काँच खुला थैले में न डालें - इससे सफ़ाई कर्मचारी घायल होते हैं।"]
+      },
+      "common_mistakes": {
+        "en": ["Mixing light bulbs, mirrors or ceramic cups with glass bottles.", "Throwing broken glass unwrapped.", "Leaving food inside jars."],
+        "hi": ["बल्ब, आईने या चीनी मिट्टी के कप काँच की बोतलों के साथ मिलाना।", "टूटा काँच बिना लपेटे फेंकना।", "जार के अंदर खाना छोड़ना।"]
+      },
+      "environment": {
+        "en": "Recycled glass melts at lower temperatures than raw materials, saving energy and sand.",
+        "hi": "रीसायकल किया गया काँच कच्चे माल की तुलना में कम तापमान पर पिघलता है, जिससे ऊर्जा और रेत की बचत होती है।"
+      }
+    },
+    "e_waste": {
+      "color": "#7B61FF",
+      "icon": "cpu",
+      "bin": "e-waste",
+      "recyclable": "authorized",
+      "name": {"en": "E-Waste", "hi": "ई-कचरा"},
+      "short": {"en": "Phones, chargers, batteries, circuit boards and electronics.", "hi": "फ़ोन, चार्जर, बैटरी, सर्किट बोर्ड और इलेक्ट्रॉनिक सामान।"},
+      "description": {
+        "en": "Discarded electrical and electronic equipment. It contains valuable metals but also hazardous substances such as lead, mercury, cadmium and lithium, so it must go to authorised collection and recycling channels only.",
+        "hi": "फेंके गए बिजली और इलेक्ट्रॉनिक उपकरण। इनमें मूल्यवान धातुएँ होती हैं, लेकिन सीसा, पारा, कैडमियम और लिथियम जैसे खतरनाक पदार्थ भी होते हैं, इसलिए इन्हें केवल अधिकृत संग्रह और रीसाइक्लिंग माध्यमों में ही देना चाहिए।"
+      },
+      "examples": {
+        "en": ["Old mobile phones and chargers", "Earphones and cables", "Laptops, keyboards and mice", "Remote controls and batteries", "TVs, microwaves and small appliances"],
+        "hi": ["पुराने मोबाइल फ़ोन और चार्जर", "ईयरफ़ोन और तार", "लैपटॉप, कीबोर्ड और माउस", "रिमोट और बैटरियाँ", "टीवी, माइक्रोवेव और छोटे उपकरण"]
+      },
+      "segregation": {
+        "en": ["Keep e-waste separate from all other waste - never put it in wet or dry bins.", "Store in a dry box until you can drop it off.", "Tape the terminals of loose batteries and keep them away from heat."],
+        "hi": ["ई-कचरे को बाकी सभी कचरे से अलग रखें - इसे गीले या सूखे डिब्बे में कभी न डालें।", "जमा करने तक इसे सूखे डिब्बे में रखें।", "खुली बैटरियों के टर्मिनल पर टेप लगाएँ और उन्हें गर्मी से दूर रखें।"]
+      },
+      "disposal": {
+        "en": ["Use the manufacturer's take-back programme or an authorised e-waste collection centre.", "Hand it only to recyclers or dismantlers authorised by the State Pollution Control Board.", "Return used batteries to dealers or battery collection points.", "Wipe personal data from phones and laptops first."],
+        "hi": ["निर्माता के वापसी कार्यक्रम या अधिकृत ई-कचरा संग्रह केंद्र का उपयोग करें।", "इसे केवल राज्य प्रदूषण नियंत्रण बोर्ड द्वारा अधिकृत रीसायकलर या डिस्मैंटलर को दें।", "इस्तेमाल की हुई बैटरियाँ डीलरों या बैटरी संग्रह केंद्रों पर लौटाएँ।", "पहले फ़ोन और लैपटॉप से अपना निजी डेटा मिटा दें।"]
+      },
+      "recycling": {
+        "en": ["Authorised recyclers safely recover copper, gold, silver, aluminium and plastics.", "Working devices can be repaired, refurbished or donated."],
+        "hi": ["अधिकृत रीसायकलर सुरक्षित रूप से तांबा, सोना, चाँदी, एल्युमिनियम और प्लास्टिक निकालते हैं।", "चालू उपकरणों की मरम्मत करके, नवीनीकरण करके या दान किया जा सकता है।"]
+      },
+      "safety": {
+        "en": ["Never open, puncture, crush or burn batteries - lithium batteries can catch fire.", "Do not dismantle devices yourself.", "Swollen or damaged batteries should be isolated in a non-flammable container and dropped off quickly.", "Keep button cells away from children - swallowing them is dangerous."],
+        "hi": ["बैटरी को कभी न खोलें, छेदें, कुचलें या जलाएँ - लिथियम बैटरी में आग लग सकती है।", "उपकरणों को स्वयं न खोलें।", "फूली हुई या क्षतिग्रस्त बैटरी को अज्वलनशील डिब्बे में अलग रखें और जल्द जमा करें।", "बटन सेल बच्चों से दूर रखें - इन्हें निगलना खतरनाक है।"]
+      },
+      "common_mistakes": {
+        "en": ["Throwing batteries or chargers in the dustbin.", "Selling to informal recyclers who burn wires and boards in the open.", "Keeping dead devices for years where batteries can leak."],
+        "hi": ["बैटरी या चार्जर कूड़ेदान में फेंकना।", "उन अनौपचारिक कबाड़ियों को बेचना जो तार और बोर्ड खुले में जलाते हैं।", "खराब उपकरण सालों तक रखना, जिससे बैटरी लीक हो सकती है।"]
+      },
+      "environment": {
+        "en": "Informal burning and acid-stripping of e-waste release toxic metals into air, soil and water. Authorised recycling recovers resources safely.",
+        "hi": "ई-कचरे को अनौपचारिक रूप से जलाने और एसिड से धातु निकालने से ज़हरीली धातुएँ हवा, मिट्टी और पानी में मिलती हैं। अधिकृत रीसाइक्लिंग से संसाधन सुरक्षित रूप से वापस मिलते हैं।"
+      }
+    },
+    "hazardous": {
+      "color": "#E5484D",
+      "icon": "triangle-alert",
+      "bin": "hazardous",
+      "recyclable": "special",
+      "name": {"en": "Hazardous Waste", "hi": "खतरनाक कचरा"},
+      "short": {"en": "Chemical and paint containers, aerosols and other harmful household waste.", "hi": "रसायन और पेंट के डिब्बे, एरोसोल और अन्य हानिकारक घरेलू कचरा।"},
+      "description": {
+        "en": "Domestic hazardous waste can be flammable, toxic, corrosive or under pressure. It must be kept separate and handed over to the municipal domestic-hazardous-waste collection or an authorised facility.",
+        "hi": "घरेलू खतरनाक कचरा ज्वलनशील, ज़हरीला, संक्षारक या दबाव वाला हो सकता है। इसे अलग रखना और नगर निकाय के घरेलू खतरनाक कचरा संग्रह या अधिकृत सुविधा को देना ज़रूरी है।"
+      },
+      "examples": {
+        "en": ["Aerosol cans (deodorant, insect spray, spray paint)", "Paint, varnish and thinner containers", "Toilet and floor cleaner bottles with residue", "Pesticide and mosquito-repellent containers", "Expired medicines", "Tube lights and CFL bulbs (contain mercury)"],
+        "hi": ["एरोसोल कैन (डियोडरेंट, कीटनाशक स्प्रे, स्प्रे पेंट)", "पेंट, वार्निश और थिनर के डिब्बे", "बचे हुए रसायन वाली टॉयलेट और फ़र्श क्लीनर की बोतलें", "कीटनाशक और मच्छर-रोधी डिब्बे", "एक्सपायर्ड दवाइयाँ", "ट्यूबलाइट और CFL बल्ब (इनमें पारा होता है)"]
+      },
+      "segregation": {
+        "en": ["Keep it in a separate, clearly labelled bag or box - never mix with wet or dry waste.", "Keep products in their original containers with labels intact.", "Store away from heat, sunlight, children and pets."],
+        "hi": ["इसे अलग, साफ़ लेबल वाले थैले या डिब्बे में रखें - गीले या सूखे कचरे में कभी न मिलाएँ।", "उत्पादों को उनके मूल डिब्बों में लेबल सहित रखें।", "गर्मी, धूप, बच्चों और पालतू जानवरों से दूर रखें।"]
+      },
+      "disposal": {
+        "en": ["Hand it over to your municipality's domestic hazardous waste collection or drop-off point.", "Return expired medicines to pharmacy take-back boxes where available.", "Ask your local body about authorised disposal facilities if you are unsure."],
+        "hi": ["इसे अपने नगर निकाय के घरेलू खतरनाक कचरा संग्रह या जमा केंद्र को दें।", "जहाँ उपलब्ध हो, एक्सपायर्ड दवाइयाँ फ़ार्मेसी के वापसी डिब्बों में लौटाएँ।", "संदेह हो तो अधिकृत निपटान सुविधाओं के बारे में अपने स्थानीय निकाय से पूछें।"]
+      },
+      "recycling": {
+        "en": ["Specialised facilities treat or safely dispose of chemicals.", "Some empty metal aerosol cans can be recycled after professional depressurisation - do not attempt this yourself."],
+        "hi": ["विशेष सुविधाएँ रसायनों का उपचार या सुरक्षित निपटान करती हैं।", "कुछ खाली धातु एरोसोल कैन पेशेवर तरीके से दबाव मुक्त करने के बाद रीसायकल हो सकते हैं - इसे स्वयं न करें।"]
+      },
+      "safety": {
+        "en": ["Never puncture, crush or burn aerosol cans - they can explode.", "Never mix chemicals (for example bleach and acid cleaners) - this can release toxic gas.", "Do not pour chemicals, paint or oil down drains or onto soil.", "Wear gloves, and wash your hands after handling containers.", "If someone is exposed or swallows a chemical, seek medical help immediately."],
+        "hi": ["एरोसोल कैन को कभी न छेदें, कुचलें या जलाएँ - इनमें विस्फोट हो सकता है।", "रसायनों को कभी न मिलाएँ (जैसे ब्लीच और एसिड क्लीनर) - इससे ज़हरीली गैस निकल सकती है।", "रसायन, पेंट या तेल नाली या मिट्टी में न डालें।", "दस्ताने पहनें और डिब्बे छूने के बाद हाथ धोएँ।", "यदि कोई रसायन के संपर्क में आए या निगल ले, तो तुरंत चिकित्सा सहायता लें।"]
+      },
+      "common_mistakes": {
+        "en": ["Throwing aerosol cans in with ordinary metal or dry waste.", "Pouring leftover paint or cleaner down the sink.", "Reusing chemical containers for storage."],
+        "hi": ["एरोसोल कैन सामान्य धातु या सूखे कचरे के साथ फेंकना।", "बचा हुआ पेंट या क्लीनर सिंक में बहाना।", "रसायन के डिब्बों को भंडारण के लिए दोबारा इस्तेमाल करना।"]
+      },
+      "environment": {
+        "en": "Hazardous chemicals contaminate groundwater and soil and put sanitation workers at risk. Separate handling keeps them out of normal waste streams.",
+        "hi": "खतरनाक रसायन भूजल और मिट्टी को दूषित करते हैं और सफ़ाई कर्मचारियों को खतरे में डालते हैं। अलग से संभालने पर ये सामान्य कचरे में नहीं मिलते।"
+      }
+    }
+  },
+  "items": {
+    "food_waste": {"en": "Food waste", "hi": "खाने का कचरा"},
+    "eggshells": {"en": "Eggshells", "hi": "अंडे के छिलके"},
+    "coffee_grounds": {"en": "Coffee grounds", "hi": "कॉफ़ी का अवशेष"},
+    "tea_bags": {"en": "Tea bags / tea leaves", "hi": "टी बैग / चायपत्ती"},
+    "cardboard": {"en": "Cardboard", "hi": "गत्ता"},
+    "newspaper_magazine": {"en": "Newspaper / magazine", "hi": "अख़बार / पत्रिका"},
+    "office_paper": {"en": "Office paper", "hi": "दफ़्तरी काग़ज़"},
+    "plastic_bottle": {"en": "Plastic bottle", "hi": "प्लास्टिक की बोतल"},
+    "plastic_food_container": {"en": "Plastic food container", "hi": "प्लास्टिक का खाने का डिब्बा"},
+    "plastic_bag": {"en": "Plastic bag", "hi": "प्लास्टिक की थैली"},
+    "plastic_cutlery_straw": {"en": "Plastic cutlery / straw", "hi": "प्लास्टिक कटलरी / स्ट्रॉ"},
+    "plastic_cup_lid": {"en": "Plastic cup lid", "hi": "प्लास्टिक कप का ढक्कन"},
+    "styrofoam": {"en": "Styrofoam (thermocol)", "hi": "थर्मोकोल"},
+    "aluminium_can": {"en": "Aluminium can", "hi": "एल्युमिनियम कैन"},
+    "steel_food_can": {"en": "Steel food can", "hi": "स्टील का खाद्य टिन"},
+    "glass_bottle": {"en": "Glass bottle", "hi": "काँच की बोतल"},
+    "glass_jar_container": {"en": "Glass jar / container", "hi": "काँच का जार / डिब्बा"},
+    "battery": {"en": "Battery", "hi": "बैटरी"},
+    "mobile_phone": {"en": "Mobile phone", "hi": "मोबाइल फ़ोन"},
+    "laptop": {"en": "Laptop", "hi": "लैपटॉप"},
+    "keyboard": {"en": "Keyboard", "hi": "कीबोर्ड"},
+    "computer_mouse": {"en": "Computer mouse", "hi": "कंप्यूटर माउस"},
+    "television": {"en": "Television", "hi": "टेलीविज़न"},
+    "camera": {"en": "Camera", "hi": "कैमरा"},
+    "microwave": {"en": "Microwave oven", "hi": "माइक्रोवेव ओवन"},
+    "smartwatch": {"en": "Smartwatch", "hi": "स्मार्टवॉच"},
+    "aerosol_can": {"en": "Aerosol can", "hi": "एरोसोल कैन"}
+  },
+  "recyclable_labels": {
+    "yes": {"en": "Recyclable", "hi": "रीसायकल योग्य"},
+    "conditional": {"en": "Often recyclable (depends on type and cleanliness)", "hi": "अक्सर रीसायकल योग्य (प्रकार और सफ़ाई पर निर्भर)"},
+    "compostable": {"en": "Compostable", "hi": "खाद योग्य"},
+    "authorized": {"en": "Recyclable only via authorised e-waste recyclers", "hi": "केवल अधिकृत ई-कचरा रीसायकलर द्वारा रीसायकल योग्य"},
+    "special": {"en": "Needs special hazardous-waste handling", "hi": "विशेष खतरनाक-कचरा प्रबंधन आवश्यक"}
+  },
+  "bins": {
+    "green": {"en": "Green bin - wet waste", "hi": "हरा डिब्बा - गीला कचरा"},
+    "blue": {"en": "Blue bin - dry waste", "hi": "नीला डिब्बा - सूखा कचरा"},
+    "e-waste": {"en": "Separate e-waste collection", "hi": "अलग ई-कचरा संग्रह"},
+    "hazardous": {"en": "Separate domestic hazardous waste", "hi": "अलग घरेलू खतरनाक कचरा"}
+  }
+}

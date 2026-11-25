@@ -1,0 +1,13 @@
+{
+  "experiment_id": "exp02_mobilenet_v3_large",
+  "arch": "mobilenet_v3_large",
+  "pretrained": true,
+  "batch_size": 32,
+  "warmup_epochs": 3,
+  "lr_head": 0.001,
+  "finetune_epochs": 12,
+  "lr_finetune": 0.0003,
+  "unfreeze_from": 10,
+  "early_stopping_patience": 4,
+  "max_minutes": 50
+}
