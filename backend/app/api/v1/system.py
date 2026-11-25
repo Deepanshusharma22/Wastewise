@@ -25,7 +25,9 @@ async def health(response: Response, settings: Settings = Depends(get_settings))
     return {
         "status": "ok" if ok else "degraded",
         "model_loaded": m is not None,
-        "model_error": registry.error,
+        # Full exception text (paths, URLs) only outside production; logs always have the details.
+        "model_error": (registry.error if settings.environment != "production"
+                        else ("model unavailable" if registry.error else None)),
         "model_name": m.name if m else None,
         "model_version": m.version if m else None,
         "supabase_configured": settings.supabase_configured,
