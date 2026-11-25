@@ -34,7 +34,7 @@ REGION = "bom1"  # Mumbai: closest to users and to Supabase ap-south-1
 def write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text)
-    print("wrote", path.relative_to(ROOT))
+    print("wrote", path)
 
 
 def make_web(sha: str) -> None:
@@ -106,7 +106,13 @@ if not (target / ".ready").exists():
         tmp.unlink(missing_ok=True)
         raise RuntimeError("WasteWise API bundle checksum mismatch - refusing to start")
     with tarfile.open(tmp) as tar:
-        tar.extractall(target, filter="data")
+        try:
+            tar.extractall(target, filter="data")
+        except TypeError:  # Python without extraction filters: reject unsafe members ourselves
+            for m in tar.getmembers():
+                if m.name.startswith("/") or ".." in Path(m.name).parts or not (m.isfile() or m.isdir()):
+                    raise RuntimeError(f"unsafe path in WasteWise API bundle: {{m.name}}")
+            tar.extractall(target)
     tmp.unlink(missing_ok=True)
     (target / ".ready").write_text(BUNDLE_SHA256)
 
