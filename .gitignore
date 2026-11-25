@@ -1,0 +1,48 @@
+# ---- secrets -----------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.secrets/
+*.pem
+*.key
+
+# ---- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- ML data & weights (large / licence-restricted; reproducible via scripts) --
+ml/datasets/raw/
+ml/datasets/processed/
+ml/datasets/train/
+ml/datasets/validation/
+ml/datasets/test/
+!ml/datasets/**/.gitkeep
+ml/models/pretrained/*.pth
+ml/models/experiments/**/*.pth
+# The selected deployment model IS versioned (small; needed to reproduce the API):
+#   ml/models/best_model.pth, backend/model_artifacts/*
+
+# ---- Node / Next.js ----------------------------------------------------------
+node_modules/
+.next/
+out/
+frontend/coverage/
+*.tsbuildinfo
+next-env.d.ts
+.vercel/
+
+# ---- OS / editors ------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

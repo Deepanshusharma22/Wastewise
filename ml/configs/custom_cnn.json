@@ -1,0 +1,13 @@
+{
+  "experiment_id": "exp01_custom_cnn",
+  "arch": "custom_cnn",
+  "pretrained": false,
+  "batch_size": 32,
+  "finetune_epochs": 18,
+  "lr_finetune": 0.001,
+  "weight_decay": 0.0005,
+  "dropout": 0.4,
+  "early_stopping_patience": 5,
+  "scheduler": "cosine",
+  "max_minutes": 45
+}
