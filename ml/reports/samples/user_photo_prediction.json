@@ -1,0 +1,23 @@
+{
+  "category": "plastic",
+  "confidence": 0.9917572140693665,
+  "is_confident": true,
+  "top_predictions": [
+    {
+      "category": "plastic",
+      "probability": 0.9917572140693665
+    },
+    {
+      "category": "hazardous",
+      "probability": 0.004671966657042503
+    },
+    {
+      "category": "metal",
+      "probability": 0.0010826202342286706
+    }
+  ],
+  "item": "plastic_bottle",
+  "item_confidence": 0.9924309849739075,
+  "reasons": [],
+  "inference_time_ms": 5.65
+}

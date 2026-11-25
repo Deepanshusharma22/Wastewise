@@ -486,9 +486,9 @@
     }
   ],
   "latency_pytorch_cpu": {
-    "single_image_ms_median": 349.0698140001314,
-    "single_image_ms_p95": 1244.0007955500505,
-    "batch16_images_per_s": 6.107738125385077,
+    "single_image_ms_median": 18.052334500680445,
+    "single_image_ms_p95": 21.293423049974077,
+    "batch16_images_per_s": 78.75328108928257,
     "device": "cpu",
     "threads": 2
   },
@@ -497,5 +497,5 @@
     "training_minutes": 47.6,
     "best_train_acc": 0.9964583333333333
   },
-  "evaluated_at": "2026-11-25T19:17:57Z"
+  "evaluated_at": "2026-11-25T20:59:58Z"
 }

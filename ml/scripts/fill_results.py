@@ -30,6 +30,10 @@ def comparison_table(cmp: dict) -> str:
         rows.append(f"| {name} | {r['params_m']} M | {r['epochs']} | {r['train_minutes']:.0f} | {r['val_f1_macro']:.4f} | "
                     f"{r['test_acc']:.4f} | {r['test_f1_macro']:.4f} | {r['test_roc_auc']:.4f} | {r['hazardous_recall']:.3f} | "
                     f"{pct(r['coverage'])} | {pct(r['acc_on_accepted'])} | {pct(r['ood_rejection'])} | {r['latency_ms_cpu']:.0f} |")
+    for r in cmp["models"]:
+        if r["coverage"] < 0.5:
+            rows.append(f"\n_{r['experiment']}: its high OOD-rejection figure is not a strength. The model is unconfident on almost "
+                        f"everything (only {pct(r['coverage'])} of in-scope test images pass its threshold of {r['threshold']})._")
     return "\n".join(rows)
 
 

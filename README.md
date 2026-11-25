@@ -59,7 +59,34 @@ docs/        architecture, ML, API, deployment and tracking documents
 ## Model results
 
 <!-- README-RESULTS:START -->
-_Pending: filled in from `ml/reports/model_comparison.md` after all experiments are evaluated._
+| Experiment | Params | Epochs | Train min | Val macro-F1 | Test acc | Test macro-F1 | ROC-AUC | Hazardous recall | Coverage @ thr | Acc on accepted | OOD rejected | CPU ms |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| exp01_custom_cnn | 1.96 M | 12 | 47 | 0.4951 | 0.5527 | 0.5184 | 0.8555 | 0.395 | 3.9 % | 92.7 % | 99.2 % | 20 |
+| **exp02_mobilenet_v3_large** (selected) | 3.48 M | 15 | 48 | 0.9049 | 0.9234 | 0.9192 | 0.9935 | 0.977 | 94.6 % | 94.6 % | 35.7 % | 18 |
+| exp03_efficientnet_b0 | 4.68 M | 10 | 52 | 0.9078 | 0.9071 | 0.9000 | 0.9904 | 0.977 | 93.8 % | 93.4 % | 33.7 % | 30 |
+
+_exp01_custom_cnn: its high OOD-rejection figure is not a strength. The model is unconfident on almost everything (only 3.9 % of in-scope test images pass its threshold of 0.87)._
+
+**Selected model: `exp02_mobilenet_v3_large`** (mobilenet_v3_large, model version `1.0.0-mobilenet_v3_large`).
+
+- **Test set** (1044 images): accuracy 0.9234, macro-F1 0.9192, weighted F1 0.9234, macro ROC-AUC 0.9935.
+- **Calibration:** temperature 0.7307; test ECE 0.0700 → 0.0245.
+- **Rejection:** threshold 0.59 accepts 94.6 % of test images, with 94.6 % accuracy on those. 35.7 % of 600 out-of-scope probe images are rejected.
+- **Top confusions:** plastic→glass (10), plastic→metal (7), glass→metal (7), organic→paper_cardboard (6), metal→plastic (6).
+- **Accuracy by source dataset:** ewastenet 0.984 (n=128), garbage12 0.936 (n=171), household30:default 0.920 (n=375), household30:real_world 0.899 (n=297), trashnet 0.904 (n=73).
+- **Latency (2 vCPU, no GPU):** ONNX Runtime 6 ms, PyTorch 18 ms median per image.
+
+| Category | Precision | Recall | F1 | Support |
+|---|---|---|---|---|
+| organic | 0.962 | 0.921 | 0.941 | 165 |
+| paper_cardboard | 0.936 | 0.952 | 0.944 | 168 |
+| plastic | 0.925 | 0.875 | 0.899 | 168 |
+| metal | 0.874 | 0.885 | 0.880 | 165 |
+| glass | 0.916 | 0.911 | 0.913 | 168 |
+| e_waste | 0.965 | 0.982 | 0.973 | 167 |
+| hazardous | 0.808 | 0.977 | 0.884 | 43 |
+
+Selection uses validation macro-F1 only; test numbers are reported for information. All figures are produced by `ml/src/evaluate.py` and `ml/src/select_model.py`. See `ml/reports/` for confusion matrices, selective-prediction curves and misclassified examples.
 <!-- README-RESULTS:END -->
 
 How the deployed model is chosen:

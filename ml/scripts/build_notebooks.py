@@ -121,7 +121,7 @@ NB04 = [
     "md:# 04 · Inference & explainability\n\nUses the deployment checkpoint `ml/models/best_model.pth` through `ml.src.inference.WastePredictor` "
     "(Top-3, calibrated threshold, Grad-CAM) on held-out **test** images, and checks parity with the exported ONNX graph used by the API.",
     SETUP,
-    "from ml.src.inference import WastePredictor, overlay\nfrom ml.src.preprocessing import load_rgb\n"
+    "from ml.src.inference import WastePredictor, overlay\nfrom ml.src.preprocessing import load_rgb\n%matplotlib inline  # ml.src.evaluate selects the Agg backend on import\n"
     "pred = WastePredictor('ml/models/best_model.pth')\nprint('threshold', pred.threshold, 'temperature', pred.temperature)",
     "m = pd.read_csv('ml/datasets/manifests/manifest_v1.csv', dtype={'uid': str})\n"
     "sample = pd.concat([m[(m.split == 'test') & (m.category == c)].sample(1, random_state=3) for c in sorted(m['category'].dropna().unique())]\n"
