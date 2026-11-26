@@ -34,6 +34,7 @@ Browser ──► Next.js 15 (Vercel: wastewise) ──/api/v1/* proxy──► 
 
 Detailed documentation:
 
+- [`docs/final_report.md`](docs/final_report.md): final project report (results, limitations, future work)
 - [`docs/implementation_plan.md`](docs/implementation_plan.md)
 - [`docs/ml_documentation.md`](docs/ml_documentation.md)
 - [`docs/api_documentation.md`](docs/api_documentation.md)
