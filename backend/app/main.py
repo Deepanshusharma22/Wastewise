@@ -37,7 +37,9 @@ async def lifespan(app: FastAPI):
                              limits=httpx.Limits(max_connections=50, max_keepalive_connections=20))
     app.state.gateway = (SupabaseGateway(s.supabase_url, s.supabase_anon_key, s.supabase_service_role_key, http)
                          if s.supabase_configured else None)
-    if not s.supabase_configured:
+    if s.local_mode:
+        log.warning("LOCAL_MODE is on: using SQLite + built-in auth. Never use this in production.")
+    elif not s.supabase_configured:
         log.warning("SUPABASE_URL / SUPABASE_ANON_KEY not set: data endpoints will return 503")
     try:
         yield
@@ -122,8 +124,27 @@ async def unhandled_exc(request: Request, exc: Exception):
 
 
 api_prefix = "/api/v1"
-for r in (system.router, predict.router, history.router, analytics.router):
+from .api.v1 import profile as profile_router  # noqa: E402
+
+for r in (system.router, predict.router, history.router, analytics.router, profile_router.router):
     app.include_router(r, prefix=api_prefix)
+
+
+if settings.local_mode:
+    # Local mode gets its own auth endpoints and file serving (no Supabase available).
+    from .api.v1 import local_auth
+    from .api.v1.files import router as files_router
+
+    app.include_router(local_auth.router, prefix=api_prefix)
+    app.include_router(files_router)
+
+    @app.get("/api/v1/local-info", tags=["local auth"], summary="Mode + local endpoint discovery")
+    async def local_info():
+        return {
+            "mode": "local",
+            "auth": f"{api_prefix}/auth",
+            "note": "SQLite + filesystem. Set LOCAL_MODE=0 and configure Supabase for production.",
+        }
 
 
 @app.get("/", include_in_schema=False)

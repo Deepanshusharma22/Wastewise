@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthCard, FormError } from "../auth-card";
-import { getSupabase } from "@/lib/supabase/client";
+import { backend } from "@/lib/backend";
 import { useI18n } from "@/lib/i18n/provider";
 import { passwordStrongEnough } from "@/lib/validation";
 
@@ -26,11 +26,15 @@ export default function ResetPasswordPage() {
     if (!passwordStrongEnough(password)) return setError(t.auth.weak);
     if (password !== confirm) return setError(t.auth.mismatch);
     setBusy(true);
-    const { error } = await getSupabase().auth.updateUser({ password });
+    // The recovery link has already produced a session (callback route), so this
+    // only needs to set the new password — in both Supabase and local mode.
+    const b = await backend();
+    const err = await b.updatePassword(password);
     setBusy(false);
-    if (error) return setError(error.message);
+    if (err) return setError(/auth|session|jwt/i.test(err.message) ? t.common.sessionExpired : err.message);
     toast.success(t.auth.passwordUpdated);
     router.replace("/dashboard");
+    router.refresh();
   }
 
   return (

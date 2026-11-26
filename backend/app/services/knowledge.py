@@ -37,6 +37,26 @@ def guidance_for(category: str) -> dict:
     return out
 
 
+def safe_guidance_for(category: str) -> dict:
+    """guidance_for() that never raises on an unknown legacy category (returns a neutral record)."""
+    try:
+        return guidance_for(category)
+    except KeyError:
+        import logging
+        logging.getLogger("wastewise.knowledge").warning("unknown category in stored row: %r", category)
+        unknown = {"en": "Unknown category", "hi": "अज्ञात श्रेणी"}
+        empty = {"en": [], "hi": []}
+        return {
+            "name": unknown, "short": unknown, "bin": "general",
+            "bin_label": {"en": "General waste", "hi": "सामान्य कचरा"},
+            "recyclable": "special",
+            "recyclable_label": {"en": "Not sure", "hi": "पता नहीं"},
+            "color": "#6B7280", "icon": "trash-2",
+            "segregation": empty, "disposal": empty, "recycling": empty,
+            "safety": empty, "common_mistakes": empty, "environment": empty,
+        }
+
+
 def item_label(item: str | None) -> dict | None:
     if not item:
         return None
@@ -44,7 +64,7 @@ def item_label(item: str | None) -> dict | None:
 
 
 def is_recyclable(category: str) -> bool:
-    return knowledge()["categories"][category]["recyclable"] in RECYCLABLE_TRUE
+    return knowledge()["categories"].get(category, {}).get("recyclable") in RECYCLABLE_TRUE
 
 
 NOTICES = {

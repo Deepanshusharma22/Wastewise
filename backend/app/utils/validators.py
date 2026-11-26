@@ -78,9 +78,33 @@ def is_uuid(value: str) -> bool:
         return False
 
 
+# Prediction images:   <user_id>/<yyyy>/<mm>/<prediction-uuid>.jpg
+# Avatars:             <user_id>/avatar-<8 hex>.<jpg|png|webp>
+_PREDICTION_PATH = r"\d{4}/\d{2}/[0-9a-f\-]{36}\.jpg"
+_AVATAR_PATH = r"avatar-[0-9a-f]{8}\.(?:jpg|png|webp)"
+_AVATAR_EXT = {"image/png": "png", "image/webp": "webp"}
+
+
+def avatar_storage_path(user_id: str, uploaded_file, force_new: bool = False) -> str:
+    """Server-generated avatar object path: `<user_id>/avatar-<8 hex>.<ext>`.
+
+    The random suffix is what the storage-path validator and the bucket policies expect,
+    and it doubles as a cache-buster when the user replaces their photo. Any previously
+    returned path for the same user is cleaned up by the caller.
+    """
+    ext = _AVATAR_EXT.get((getattr(uploaded_file, "content_type", "") or "").lower(), "jpg")
+    suffix = uuid.uuid4().hex[:8]
+    return f"{user_id}/avatar-{suffix}.{ext}"
+
+
 def is_owned_storage_path(path: str | None, user_id: str) -> bool:
-    """Storage paths are generated server-side as `<user_id>/<yyyy>/<mm>/<uuid>.jpg`; double-check before use."""
-    if not path:
+    """Storage paths are generated server-side; double-check before using them.
+
+    Accepts only the two shapes the app itself writes (see ``image_service.storage_path``
+    and the avatar upload in Settings). Anything else — including a path with ``..`` —
+    is rejected, so a tampered row can never point at another user's object.
+    """
+    if not path or ".." in path:
         return False
-    return bool(re.fullmatch(rf"{re.escape(user_id)}/\d{{4}}/\d{{2}}/[0-9a-f\-]{{36}}\.jpg", path)) \
-        or bool(re.fullmatch(rf"{re.escape(user_id)}/avatar-[0-9a-f]{{8}}\.jpg", path))
+    stem = rf"{re.escape(user_id)}/"
+    return bool(re.fullmatch(stem + _PREDICTION_PATH, path) or re.fullmatch(stem + _AVATAR_PATH, path))

@@ -1,5 +1,9 @@
 # Deployment guide
 
+> **Start here:** [`docs/vercel-deploy.md`](vercel-deploy.md) — the current, verified
+> click-by-click recipe (two projects from one repo, Root Directory `frontend` / `backend`).
+> The "file upload with pinned sources" section below is **legacy** and no longer works.
+
 WasteWise runs as three parts:
 
 | Part | Where | Notes |
@@ -90,7 +94,7 @@ Supabase auth is set up as follows:
 * `site_url` = `https://wastewise-three-lilac.vercel.app`.
 * `uri_allow_list` = `<web>/auth/callback**` for both production aliases plus `http://localhost:3000/auth/callback**`.
 
-### How v1 is deployed: file upload with pinned sources
+### LEGACY (does not work any more): file upload with pinned sources
 
 The Vercel projects are **not linked to GitHub** yet. Linking needs a GitHub *Login Connection* on the Vercel account, and Vercel's anonymous GitHub fetches were rate-limited. Instead, `scripts/make_vercel_deploy.py` generates a few small bootstrap files in `deploy/vercel/{web,api}/`. These files are committed and reviewable, and they are uploaded with the Vercel deployments API:
 

@@ -86,11 +86,9 @@ def get_verifier(settings: Settings = Depends(get_settings)) -> JWTVerifier:
     return _verifier
 
 
-def get_current_user(
-    request: Request,
-    creds: HTTPAuthorizationCredentials | None = Depends(bearer),
-    verifier: JWTVerifier = Depends(get_verifier),
-) -> AuthUser:
+def authenticate_bearer(request: Request, creds: HTTPAuthorizationCredentials | None,
+                        verifier: JWTVerifier) -> AuthUser:
+    """Verify a Supabase bearer token (shared by the plain dependency and the mode-aware one)."""
     if creds is None or creds.scheme.lower() != "bearer" or not creds.credentials:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail={"code": "not_authenticated",
                                                                    "message": "Sign in to continue."},
@@ -106,3 +104,11 @@ def get_current_user(
                                                                    "message": "Invalid authentication token."})
     request.state.user_id = user.id
     return user
+
+
+def get_current_user(
+    request: Request,
+    creds: HTTPAuthorizationCredentials | None = Depends(bearer),
+    verifier: JWTVerifier = Depends(get_verifier),
+) -> AuthUser:
+    return authenticate_bearer(request, creds, verifier)

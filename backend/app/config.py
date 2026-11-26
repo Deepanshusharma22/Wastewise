@@ -23,6 +23,24 @@ class Settings(BaseSettings):
     supabase_service_role_key: str = ""    # server-only; used exclusively for account deletion
     supabase_jwt_secret: str = ""          # optional: legacy HS256 projects
     supabase_jwks: str = ""                # optional: static JWKS JSON (skips network fetch)
+    # --- local mode (no Supabase needed: SQLite + built-in auth + filesystem storage) -------------
+    # Turn on with LOCAL_MODE=1. Never enable in production: it bypasses Supabase entirely.
+    local_mode: bool = False
+    local_db_path: str = str(BACKEND_DIR / ".local" / "wastewise.db")
+    local_storage_dir: str = str(BACKEND_DIR / ".local" / "storage")
+    local_jwt_secret: str = "wastewise-local-dev-secret-change-me"
+    local_token_ttl_seconds: int = 604800          # 7 days
+    local_auto_confirm: bool = True                # skip the email step for local accounts
+    # Empty => local file URLs are relative ("/files/..."), which is what you want behind
+    # a dev proxy or preview host. Set an absolute URL only if the API is on another origin.
+    public_base_url: str = ""
+    # local-mode auth limits (per IP); generous defaults, lowered for production-like demos
+    local_signup_per_hour: int = 20
+    local_login_per_5min: int = 30
+    local_resend_per_5min: int = 5
+    local_recover_per_hour: int = 10
+    local_account_delete_per_hour: int = 5
+
     storage_bucket: str = "waste-images"
     avatar_bucket: str = "avatars"
     signed_url_ttl_seconds: int = 3600
@@ -57,6 +75,11 @@ class Settings(BaseSettings):
     @property
     def supabase_configured(self) -> bool:
         return bool(self.supabase_url and self.supabase_anon_key)
+
+    @property
+    def data_configured(self) -> bool:
+        """True when the data layer can serve requests (Supabase or local mode)."""
+        return self.local_mode or self.supabase_configured
 
     @property
     def max_upload_bytes(self) -> int:

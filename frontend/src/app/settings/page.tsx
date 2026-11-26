@@ -15,7 +15,7 @@ import { PageHeader } from "@/components/page-header";
 import { useAuth } from "@/components/auth-provider";
 import { useErrorMessage } from "@/components/error-state";
 import { api } from "@/lib/api";
-import { getSupabase } from "@/lib/supabase/client";
+import { backend } from "@/lib/backend";
 import { useI18n } from "@/lib/i18n/provider";
 import type { Lang, ModelInfo } from "@/lib/types";
 import { pct } from "@/lib/utils";
@@ -47,8 +47,8 @@ export default function SettingsPage() {
     setThemePref(profile.theme);
     setSaveImages(profile.save_images);
     if (profile.avatar_url) {
-      getSupabase().storage.from("avatars").createSignedUrl(profile.avatar_url, 3600)
-        .then(({ data }) => setAvatar(data?.signedUrl ?? null));
+      if (profile.avatar_signed_url) { setAvatar(profile.avatar_signed_url); return; }
+      void backend().then((b) => b.signedAvatarUrl(profile.avatar_url)).then((u) => setAvatar(u));
     }
   }, [profile]);
 
@@ -58,9 +58,10 @@ export default function SettingsPage() {
     e.preventDefault();
     if (!user) return;
     setSaving(true);
-    const { error } = await getSupabase().from("profiles")
-      .update({ full_name: name.trim() || null, preferred_language: prefLang, theme, save_images: saveImages })
-      .eq("id", user.id);
+    const b = await backend();
+    const error = await b.updateProfile({
+      full_name: name.trim() || null, preferred_language: prefLang, theme, save_images: saveImages,
+    });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     setLang(prefLang);
@@ -71,23 +72,14 @@ export default function SettingsPage() {
 
   async function uploadAvatar(f: File | undefined) {
     if (!f || !user) return;
-    if (!["image/jpeg", "image/png", "image/webp"].includes(f.type) || f.size > 2 * 1024 * 1024) {
-      toast.error(f.size > 2 * 1024 * 1024 ? "Max 2 MB" : t.analyze.badType);
-      return;
-    }
     setUploading(true);
-    const ext = f.type === "image/png" ? "png" : f.type === "image/webp" ? "webp" : "jpg";
-    const path = `${user.id}/avatar.${ext}`;
-    const sb = getSupabase();
-    const { error } = await sb.storage.from("avatars").upload(path, f, { upsert: true, contentType: f.type, cacheControl: "3600" });
-    if (!error) {
-      await sb.from("profiles").update({ avatar_url: path }).eq("id", user.id);
-      const { data } = await sb.storage.from("avatars").createSignedUrl(path, 3600);
-      setAvatar(data?.signedUrl ? `${data.signedUrl}&v=${Date.now()}` : null);
-      await refreshProfile();
-    } else {
-      toast.error(error.message);
-    }
+    // The backend chooses the storage path (`<uid>/avatar-<8 hex>.<ext>`), which is the
+    // only shape the API accepts — this is what makes account deletion remove the photo.
+    const b = await backend();
+    const { avatarUrl, error } = await b.uploadAvatar(f);
+    if (error) toast.error(error.message);
+    else if (avatarUrl) setAvatar(`${avatarUrl}${avatarUrl.includes("?") ? "&" : "?"}v=${Date.now()}`);
+    await refreshProfile();
     setUploading(false);
   }
 
@@ -95,7 +87,7 @@ export default function SettingsPage() {
     setDeleting(true);
     try {
       await api.deleteAccount();
-      await getSupabase().auth.signOut();
+      await (await backend()).logout();
       toast.success(t.settings.deleted);
       router.replace("/");
       router.refresh();
