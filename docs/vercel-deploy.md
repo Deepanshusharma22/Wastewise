@@ -87,33 +87,20 @@ Authentication → Email Templates → Confirmation / Recovery →
 
 ---
 
-## Path B: one import using the root `vercel.json` (web app only)
+## Tried and rejected: a `vercel.json` at the repository root
 
-The repository root contains:
+We added a root `vercel.json` (`framework: nextjs`, `installCommand: cd frontend && npm ci`,
+`buildCommand: cd frontend && npm run build`, `outputDirectory: frontend/.next`) and
+pushed it. **Result: the project `deepanshu-projects1/wastewise` deployment failed**
+(commit `89fbe7e`), while the base commit had deployed successfully.
 
-```json
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "installCommand": "cd frontend && npm ci --include=dev",
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/.next",
-  "regions": ["bom1"]
-}
-```
+Both commands work locally, so the failure comes from Vercel's Next.js builder wanting the
+app (its `package.json` and `node_modules`) at the *project* root — a `cd frontend` wrapper
+does not satisfy it. The file was therefore removed.
 
-So importing the repo **without** a Root Directory runs the web build from the repo root.
-Both commands are verified locally (`npm ci --include=dev` installs TypeScript and
-Tailwind; `cd frontend && npm run build` produces 15 routes).
-
-Caveats — read before using:
-
-- It deploys **only the web app**. The API still needs its own project (Path A step 1),
-  and the web project still needs `API_URL`.
-- Vercel's Next.js builder may still expect the app at the project root and report
-  *"No Output Directory named 'public' found"*. If that happens, set Root Directory to
-  `frontend` and this root file is simply ignored (which is the recommended setup anyway).
-- Keep `API_URL` set as an environment variable, exactly as in Path A step 2.
+**Conclusion: do not put a `vercel.json` at the repo root for this layout. Set the
+project's Root Directory to `frontend` instead** (Path A step 2). `backend/vercel.json`
+stays, because there the Root Directory *is* `backend`.
 
 ---
 
