@@ -29,7 +29,7 @@ WasteWise lets a user photograph one waste item and get back:
 | Layer | Technology | Notes |
 |---|---|---|
 | ML | PyTorch 2.x and torchvision; ONNX Runtime for inference | Three architectures compared; the winner is exported to ONNX |
-| API | FastAPI (Python 3.12) on Vercel (bom1) | Lazy-bootstrap wrapper; rate limits of 10/min and 300/day per user; 4 MB upload cap |
+| API | FastAPI (Python 3.12) on Vercel | Lazy-bootstrap wrapper; rate limits of 10/min and 300/day per user; 4 MB upload cap |
 | Data | Supabase: Auth, Postgres with RLS, private Storage | Each request uses the user's own JWT, so RLS applies. The service key is used only to delete an account |
 | Web | Next.js 15, TypeScript, Tailwind, shadcn/ui on Vercel | `/api/v1/*` is proxied server-side to the API; EN/HI; dark theme; respects reduced-motion |
 
@@ -98,7 +98,7 @@ The selected model is also the best of the three on the test set.
 - **Size and speed:** 14.1 MB ONNX file; 5.5 ms median ONNX Runtime latency on CPU.
 - **Rejection rule:** a prediction is accepted only if the calibrated confidence is at least 0.59 and the gap between the top two classes is at least 0.15. The threshold is the smallest value in [0.50, 0.90] that reaches 95% selective accuracy on the validation set.
 
-**Live check of the deployed system:** a real phone photo containing a PET bottle, crumpled paper and a soda can was classified as *plastic* (item: plastic bottle) with 0.992 confidence, in 5.65 ms.
+**Real-photo check (deployed ONNX model, run locally):** a real photo containing a PET bottle, crumpled paper and a soda can was classified as *plastic* (item: plastic bottle) with 0.992 confidence, in 5.65 ms.
 
 ## 6. Limitations (stated honestly)
 
