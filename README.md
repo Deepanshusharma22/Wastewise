@@ -40,6 +40,7 @@ Detailed documentation:
 - [`docs/api_documentation.md`](docs/api_documentation.md)
 - [`docs/deployment.md`](docs/deployment.md)
 - [`docs/project_tracking.md`](docs/project_tracking.md)
+- [`docs/vercel-deploy.md`](docs/vercel-deploy.md) — deploy to Vercel (web + API projects)
 - [`docs/local-demo.md`](docs/local-demo.md) — run and log in without Supabase
 - [`docs/fixes-applied.md`](docs/fixes-applied.md) — bug fixes (login links, HEIC, avatars, CI)
 - [`docs/roadmap.md`](docs/roadmap.md) · [`docs/bugs-and-gaps.md`](docs/bugs-and-gaps.md)
