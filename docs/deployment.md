@@ -5,7 +5,7 @@ WasteWise runs as three parts:
 | Part | Where | Notes |
 |---|---|---|
 | Frontend (Next.js 15) | Vercel project `wastewise` (root directory `frontend/`) | Proxies `/api/v1/*` to the API on the server side, so the browser only ever talks to one origin (no CORS, no API URL in client bundles) |
-| API (FastAPI + ONNX Runtime) | Vercel project `wastewise-api` (root directory `backend/`, Python serverless function `api/index.py`) | Same code runs under `uvicorn`/Docker (`backend/Dockerfile`), so it can move to Render, Railway, Fly.io or Cloud Run without changes |
+| API (FastAPI + ONNX Runtime) | Vercel project `wastewise-api` (root directory `backend/`, Vercel **FastAPI** framework preset, entry point `index.py`) | Same code runs under `uvicorn`/Docker (`backend/Dockerfile`), so it can move to Render, Railway, Fly.io or Cloud Run without changes |
 | Database, auth, storage | Supabase project `tfcwyccbhspkxfttfefc` (ap-south-1) | Migration `supabase/migrations/20261125000001_initial_schema.sql` (RLS on every table, private buckets) |
 
 ## Environment variables
@@ -17,7 +17,7 @@ WasteWise runs as three parts:
 | `ENVIRONMENT` | `production` (turns off `/docs`) | plain |
 | `SUPABASE_URL` | `https://tfcwyccbhspkxfttfefc.supabase.co` | plain |
 | `SUPABASE_ANON_KEY` | publishable key (`sb_publishable_…`) | plain |
-| `SUPABASE_SERVICE_ROLE_KEY` | dedicated secret key `wastewise_api` (`sb_secret_…`). Used **only** by `DELETE /api/v1/account` | **sensitive** |
+| `SUPABASE_SERVICE_ROLE_KEY` | the project's service-role key (legacy JWT; new `sb_secret_…` keys are only shown once in the dashboard). Used **only** by `DELETE /api/v1/account` | **sensitive** |
 | `CORS_ORIGINS` | the frontend production URL (only needed for direct browser calls; the proxy doesn't need it) | plain |
 
 ### `wastewise`
@@ -26,7 +26,7 @@ WasteWise runs as three parts:
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://tfcwyccbhspkxfttfefc.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | publishable key |
-| `API_URL` | production URL of `wastewise-api`, e.g. `https://wastewise-api.vercel.app` |
+| `API_URL` | production URL of `wastewise-api`: `https://wastewise-api-three.vercel.app`. Read at **build** time by the `next.config.ts` rewrite, so redeploy the frontend after changing it |
 
 ## Supabase auth settings
 
@@ -83,7 +83,7 @@ Then commit `backend/model_artifacts/` and `ml/models/best_model.pth`, and redep
 | Part | URL |
 |---|---|
 | Web app | https://wastewise-three-lilac.vercel.app (alias: `wastewise-madhurchaudhary65-7604s-projects.vercel.app`) |
-| API | see the `wastewise-api` project (URL recorded below once deployed) |
+| API | https://wastewise-api-three.vercel.app (`/api/v1/health`, `/api/v1/model-info`; `/__bootstrap` shows cold-start status) |
 
 Supabase auth is set up as follows:
 
@@ -95,18 +95,19 @@ Supabase auth is set up as follows:
 The Vercel projects are **not linked to GitHub** yet. Linking needs a GitHub *Login Connection* on the Vercel account, and Vercel's anonymous GitHub fetches were rate-limited. Instead, `scripts/make_vercel_deploy.py` generates a few small bootstrap files in `deploy/vercel/{web,api}/`. These files are committed and reviewable, and they are uploaded with the Vercel deployments API:
 
 * **web.** `fetch_source.sh` downloads the `frontend/` sources of one **pinned commit** from `codeload.github.com`. After that, `npm ci` and `next build` run normally, using the committed `package-lock.json`.
-* **api.** `api/index.py` downloads a **GitHub release bundle**. The bundle is `git archive` of `backend/` at the release commit, including `model_artifacts/`. The script checks the bundle's **SHA-256**, extracts it to `/tmp` once per instance, and imports `app.main:app`. When the model files are loaded, they are checked again against the checksums in `model_card.json`.
+* **api.** `index.py` (FastAPI preset) is a tiny ASGI wrapper. On the first request to an instance it downloads the **GitHub commit archive** of the release commit (`https://github.com/<repo>/archive/<sha>.tar.gz`, byte-stable), checks its **SHA-256**, extracts only `backend/` (including `model_artifacts/`) to `/tmp`, and then hands every request to `app.main:app`. When the model files are loaded, they are checked again against the checksums in `model_card.json`. The bootstrap runs lazily in a worker thread (about 3.5 s on Vercel), so it never hits the function init limit; `GET /__bootstrap` reports `cold | bootstrapping | ready | failed` plus the error message, which makes cold-start problems diagnosable without log access.
+* Deploy the API with project settings `{"framework": "fastapi"}`. Do **not** add a catch-all rewrite to `/api/index`: with backend framework presets Vercel passes the rewritten path to the app, so every route returns 404. Note that the Hobby plan ran the function in `iad1` even though `vercel.json` asks for `bom1`.
 
 Redeploying:
 
 ```bash
 # web: after pushing the commit you want live
 python scripts/make_vercel_deploy.py web --sha $(git rev-parse HEAD)
-# api: build + publish a bundle, then generate the entry point
-git archive --format=tar.gz -o wastewise-api-<ver>.tar.gz HEAD backend
-gh release upload <tag> wastewise-api-<ver>.tar.gz
-python scripts/make_vercel_deploy.py api --bundle-url <asset url> --bundle-sha256 $(sha256sum wastewise-api-<ver>.tar.gz | cut -d' ' -f1)
+# api: pin the commit archive (after pushing), then generate the entry point
+SHA=$(git rev-parse HEAD)
+curl -fsSL -o /tmp/ww.tar.gz https://github.com/Madhurchaudhary/Wastewise/archive/$SHA.tar.gz
+python scripts/make_vercel_deploy.py api --bundle-url https://github.com/Madhurchaudhary/Wastewise/archive/$SHA.tar.gz --bundle-sha256 $(sha256sum /tmp/ww.tar.gz | cut -d' ' -f1)
 # upload deploy/vercel/<target>/* as a production deployment (Vercel dashboard, CLI `vercel deploy --prod`, or API)
 ```
 
-Once GitHub is connected in Vercel (Account Settings → Login Connections, then Project → Settings → Git), switch to normal Git deployments. Use root directory `frontend/` for `wastewise` and `backend/` for `wastewise-api`; `backend/vercel.json` and `backend/api/index.py` are already set up for that. After the switch, `deploy/vercel/` is no longer needed.
+Once GitHub is connected in Vercel (Account Settings → Login Connections, then Project → Settings → Git), switch to normal Git deployments. Use root directory `frontend/` for `wastewise` and `backend/` for `wastewise-api`; `backend/vercel.json` (framework `fastapi`) and `backend/index.py` are already set up for that. After the switch, `deploy/vercel/` is no longer needed.

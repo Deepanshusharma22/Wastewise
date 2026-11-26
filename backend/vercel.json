@@ -1,10 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 30,
-      "excludeFiles": "{tests/**,**/__pycache__/**,.pytest_cache/**,Dockerfile,.env*}"
-    }
-  },
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+  "framework": "fastapi",
+  "regions": ["bom1"]
 }

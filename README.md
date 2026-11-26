@@ -49,7 +49,7 @@ ml/          data prep, training, evaluation, model selection, ONNX export, note
   datasets/  manifests only (raw images are NOT committed)
   models/    best_model.pth + experiments/<id>/training_history.json
   reports/   dataset report, per-model evaluation, comparison, curves
-backend/     FastAPI app (app/), tests, Dockerfile, Vercel entry (api/index.py), model_artifacts/
+backend/     FastAPI app (app/), tests, Dockerfile, Vercel entry (index.py), model_artifacts/
 frontend/    Next.js app (src/app, src/components, src/lib), vitest tests
 supabase/    SQL migrations (schema, RLS policies, storage buckets, analytics views)
 shared/      waste_knowledge.json (EN/HI disposal guidance), taxonomy
