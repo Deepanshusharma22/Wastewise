@@ -101,9 +101,10 @@ NB03 = [
     SETUP,
     "from IPython.display import Image as Img, Markdown\n"
     "display(Markdown(Path('ml/reports/model_comparison.md').read_text()))",
+    "from ml.src.taxonomy import CATEGORIES\n"
     "evals = {p.parent.name: json.load(open(p)) for p in sorted(Path('ml/reports').glob('*/evaluation.json'))}\n"
     "for k, e in evals.items():\n"
-    "    print(k); display(pd.DataFrame(e['test']['per_class']).T.loc[e['categories']].round(3))",
+    "    print(k); display(pd.DataFrame(e['test']['per_class']).T.loc[list(CATEGORIES)].round(3))",
     "sel = json.load(open('ml/reports/model_comparison.json'))['selected']; print('selected:', sel)\n"
     "Img(f'ml/reports/{sel}/confusion_matrix.png')",
     "Img(f'ml/reports/{sel}/selective_curve.png')",
@@ -120,7 +121,7 @@ NB04 = [
     "md:# 04 · Inference & explainability\n\nUses the deployment checkpoint `ml/models/best_model.pth` through `ml.src.inference.WastePredictor` "
     "(Top-3, calibrated threshold, Grad-CAM) on held-out **test** images, and checks parity with the exported ONNX graph used by the API.",
     SETUP,
-    "from ml.src.inference import WastePredictor, overlay\nfrom ml.src.preprocessing import load_rgb\n"
+    "from ml.src.inference import WastePredictor, overlay\nfrom ml.src.preprocessing import load_rgb\n%matplotlib inline  # ml.src.evaluate selects the Agg backend on import\n"
     "pred = WastePredictor('ml/models/best_model.pth')\nprint('threshold', pred.threshold, 'temperature', pred.temperature)",
     "m = pd.read_csv('ml/datasets/manifests/manifest_v1.csv', dtype={'uid': str})\n"
     "sample = pd.concat([m[(m.split == 'test') & (m.category == c)].sample(1, random_state=3) for c in sorted(m['category'].dropna().unique())]\n"

@@ -193,3 +193,49 @@ def test_sliding_window_limiter():
     assert e.value.status_code == 429 and int(e.value.headers["Retry-After"]) == 59
     lim.check("k", [(2, 60)], now=61)          # window slid
     lim.check("other", [(2, 60)], now=2)       # keys are independent
+
+
+# --------------------------------------------------------------------------- remote model artifacts
+def _patch_httpx(monkeypatch, payloads: dict[str, bytes]):
+    import httpx
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        name = request.url.path.rsplit("/", 1)[-1]
+        return httpx.Response(200, content=payloads[name]) if name in payloads else httpx.Response(404)
+
+    real = httpx.Client
+    monkeypatch.setattr(httpx, "Client", lambda *a, **k: real(transport=httpx.MockTransport(handler), **{x: y for x, y in k.items() if x != "transport"}))
+
+
+def test_materialise_downloads_and_verifies(tmp_path, monkeypatch):
+    import hashlib
+    from app.ml.model_loader import materialise_artifacts
+
+    onnx, npz = b"onnx-bytes" * 100, b"npz-bytes" * 50
+    card = {"onnx_sha256": hashlib.sha256(onnx).hexdigest(), "gradcam_head_sha256": hashlib.sha256(npz).hexdigest()}
+    monkeypatch.setenv("TMPDIR", str(tmp_path / "tmp"))
+    _patch_httpx(monkeypatch, {"wastewise.onnx": onnx, "gradcam_head.npz": npz})
+    d = materialise_artifacts(tmp_path / "card", "https://example.test/artifacts/", card)
+    assert (d / "wastewise.onnx").read_bytes() == onnx
+    assert (d / "gradcam_head.npz").read_bytes() == npz
+
+
+def test_materialise_rejects_tampered_download(tmp_path, monkeypatch):
+    import hashlib
+    from app.ml.model_loader import materialise_artifacts
+
+    card = {"onnx_sha256": hashlib.sha256(b"genuine").hexdigest(), "gradcam_head_sha256": hashlib.sha256(b"x").hexdigest()}
+    monkeypatch.setenv("TMPDIR", str(tmp_path / "tmp"))
+    _patch_httpx(monkeypatch, {"wastewise.onnx": b"tampered", "gradcam_head.npz": b"x"})
+    with pytest.raises(RuntimeError, match="checksum"):
+        materialise_artifacts(tmp_path / "card", "https://example.test/a", card)
+    assert not list((tmp_path / "tmp").rglob("wastewise.onnx"))
+
+
+def test_materialise_requires_checksums_and_url(tmp_path):
+    from app.ml.model_loader import materialise_artifacts
+
+    with pytest.raises(FileNotFoundError):
+        materialise_artifacts(tmp_path, "", {})
+    with pytest.raises(RuntimeError, match="checksums"):
+        materialise_artifacts(tmp_path, "https://example.test", {"onnx_sha256": "abc"})

@@ -4,9 +4,9 @@ Every model is a backbone + two heads:
   * ``category_head`` -> 7 waste categories (primary task)
   * ``item_head``     -> fine-grained item types (auxiliary task, partially labelled)
 
-The backend re-implements ``build_model`` in ``backend/app/ml/architectures.py``
-(it must not depend on training code); ``backend/tests`` load the real
-checkpoint to guarantee both stay in sync.
+The backend does not import this module: it serves the ONNX graph exported by
+``ml/src/select_model.py`` (backbone features + both heads), so training code and
+the API stay decoupled.
 """
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ from torchvision import models
 ARCHITECTURES = ("custom_cnn", "mobilenet_v3_large", "efficientnet_b0")
 
 PRETRAINED_FILES = {
-    # torchvision IMAGENET1K_V2 / IMAGENET1K_V1 weights, verified by SHA-256 prefix
+    # torchvision IMAGENET1K_V1 weights for both backbones (verified by SHA-256 in fetch_pretrained.sh)
     "mobilenet_v3_large": "mobilenet_v3_large-5c1a4163.pth",
     "efficientnet_b0": "efficientnet_b0_rwightman-7f5810bc.pth",
 }
@@ -34,11 +34,18 @@ def _conv_block(cin: int, cout: int) -> nn.Sequential:
 
 
 class CustomCNN(nn.Module):
-    """Baseline CNN trained from scratch: 5 conv blocks (conv-BN-ReLU x2 + max-pool)."""
+    """Baseline CNN trained from scratch: stride-2 stem + 5 conv blocks (conv-BN-ReLU x2 + max-pool).
 
-    def __init__(self, widths=(32, 64, 128, 192, 256)):
+    The stem halves the resolution before the first block (224 -> 112). Without it the
+    full-resolution 32-channel block alone needs ~2 GB of activations at batch 32,
+    which does not fit the 4 GB CPU training box, and costs ~4x the compute.
+    """
+
+    def __init__(self, widths=(32, 64, 128, 192, 256), stem: int = 24):
         super().__init__()
-        layers, cin = [], 3
+        layers = [nn.Sequential(nn.Conv2d(3, stem, 3, stride=2, padding=1, bias=False),
+                                nn.BatchNorm2d(stem), nn.ReLU(inplace=True))]
+        cin = stem
         for w in widths:
             layers.append(_conv_block(cin, w))
             cin = w

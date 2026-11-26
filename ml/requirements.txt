@@ -1,0 +1,17 @@
+# ML pipeline (training, evaluation, export, notebooks). CPU wheels:
+#   pip install --index-url https://download.pytorch.org/whl/cpu torch==2.15.0 torchvision==0.29.2
+#   pip install -r ml/requirements.txt
+torch==2.15.0
+torchvision==0.29.2
+numpy==2.4.6
+pandas==3.1.1
+pillow==11.3.0
+scikit-learn==1.9.1
+matplotlib==3.11.2
+onnx==1.23.2
+onnxscript==0.7.2
+onnxruntime==1.32.0
+nbformat==5.11.1
+nbconvert==7.17.2
+ipykernel==7.4.0
+pytest==8.4.2

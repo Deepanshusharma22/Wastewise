@@ -1,0 +1,15 @@
+{
+  "experiment_id": "exp01_custom_cnn",
+  "arch": "custom_cnn",
+  "best": {
+    "f1_macro": 0.49506407579905826,
+    "acc": 0.5255544840887174,
+    "epoch": 12,
+    "train_acc": 0.5152083333333334
+  },
+  "epochs_run": 12,
+  "training_minutes": 46.6,
+  "params": 1955674,
+  "device": "cpu",
+  "checkpoint": "/home/user/Wastewise/ml/models/experiments/exp01_custom_cnn/best_model.pth"
+}
