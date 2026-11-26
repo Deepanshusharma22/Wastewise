@@ -1,5 +1,6 @@
 "use client";
 
+import { backend } from "@/lib/backend";
 import { getSupabase } from "@/lib/supabase/client";
 import type {
   AnalyticsSummary, CategoryCount, Feedback, HistoryDetail, HistoryPage, ModelInfo, PredictionResult,
@@ -13,6 +14,10 @@ export class ApiError extends Error {
 }
 
 async function token(): Promise<string | null> {
+  const b = await backend();
+  if (b.mode === "local") {
+    return typeof window === "undefined" ? null : window.localStorage.getItem("ww-local-token");
+  }
   const { data } = await getSupabase().auth.getSession();
   return data.session?.access_token ?? null;
 }
@@ -61,6 +66,8 @@ export const api = {
   analytics: () => request<AnalyticsSummary>("/analytics"),
   distribution: () => request<CategoryCount[]>("/analytics/category-distribution"),
   deleteAccount: () => request<void>("/account", { method: "DELETE" }),
+  /** True when the API runs with LOCAL_MODE=1 (SQLite, no email server). */
+  localInfo: () => request<{ mode: string } | null>("/local-info", {}, false).catch(() => null),
 };
 
 /** Maps an ApiError to a user-facing message (bilingual handled by caller via dictionary keys). */

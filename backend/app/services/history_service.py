@@ -65,13 +65,21 @@ async def get_detail(gw: SupabaseGateway, settings: Settings, user: AuthUser, pr
         "select": "id,prediction_id,user_correctness_feedback,corrected_category,comments,created_at",
         "prediction_id": pg_eq(prediction_id), "user_id": pg_eq(user.id)})
     top_cats = [t["category"] for t in row["top_predictions"]]
+    reasons = row.get("uncertainty_reasons") or []
+    if isinstance(reasons, str):          # defensive: older rows / raw JSONB text
+        try:
+            import json as _json
+            reasons = _json.loads(reasons)
+        except Exception:
+            reasons = []
     detail = _item(row, urls)
     detail.update({
         "top_predictions": row["top_predictions"],
+        "uncertainty_reasons": reasons,
         "disposal_instructions": row.get("disposal_instructions") or {"en": [], "hi": []},
         "safety_precautions": row.get("safety_precautions") or {"en": [], "hi": []},
         "quality_warnings": row.get("quality_warnings") or [],
-        "guidance": knowledge.guidance_for(row["predicted_category"]),
+        "guidance": knowledge.safe_guidance_for(row["predicted_category"]),
         "notices": knowledge.notices_for(row["predicted_category"], row["is_confident"], top_cats,
                                          row.get("predicted_class")),
         "model_name": row["model_name"], "inference_time_ms": row.get("inference_time_ms"),

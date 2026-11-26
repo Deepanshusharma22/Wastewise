@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends
 from ...database.supabase_client import SupabaseGateway
 from ...schemas.analytics import AnalyticsSummary, CategoryCount
 from ...services import analytics_service
-from ...utils.security import AuthUser, get_current_user
-from ..deps import get_gateway
+from ...utils.security import AuthUser
+from ..deps import get_current_user, get_gateway
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 

@@ -1,4 +1,6 @@
 -r requirements.txt
 pytest>=8,<9
+# `onnx` is imported by tests/conftest.py to build the tiny test graph (was missing -> collection error)
+onnx>=1.16,<2
 pytest-asyncio>=0.23,<1
 cryptography>=42

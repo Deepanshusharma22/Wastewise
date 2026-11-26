@@ -25,7 +25,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   allowedDevOrigins: ["*.e2b.app"],
   async rewrites() {
-    return [{ source: "/api/v1/:path*", destination: `${API_URL}/api/v1/:path*` }];
+    return [
+      { source: "/api/v1/:path*", destination: `${API_URL}/api/v1/:path*` },
+      // Local mode stores images on the API's filesystem; this keeps every browser
+      // request same-origin (no localhost:8000 leaking into the page, works on previews).
+      { source: "/files/:path*", destination: `${API_URL}/files/:path*` },
+    ];
   },
   async headers() {
     return [

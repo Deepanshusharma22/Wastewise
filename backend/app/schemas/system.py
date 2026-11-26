@@ -10,6 +10,7 @@ class HealthResponse(BaseModel):
     model_name: str | None
     model_version: str | None
     supabase_configured: bool
+    local_mode: bool = False
     environment: str
 
 

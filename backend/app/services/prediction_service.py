@@ -11,7 +11,7 @@ from starlette.concurrency import run_in_threadpool
 from ..config import Settings
 from ..database.supabase_client import SupabaseError, SupabaseGateway, pg_eq
 from ..ml import inference
-from ..ml.model_loader import LoadedModel
+from ..ml.model_loader import LoadedModel, inference_lock
 from ..utils.security import AuthUser
 from . import image_service, knowledge
 
@@ -20,13 +20,14 @@ log = logging.getLogger("wastewise.predict")
 
 def _infer(model: LoadedModel, img: Image.Image, threshold_override: float | None):
     """CPU-bound part: runs in a worker thread so the event loop stays responsive."""
-    res = inference.predict(model, img, threshold_override)
-    cam_url = None
-    try:
-        cam = inference.gradcam(model, res.features, res.category)
-        cam_url = inference.gradcam_overlay_png(model, img, cam)
-    except Exception:  # Grad-CAM is an explanation aid; never fail the prediction because of it
-        log.exception("grad-cam failed")
+    with inference_lock:
+        res = inference.predict(model, img, threshold_override)
+        cam_url = None
+        try:
+            cam = inference.gradcam(model, res.features, res.category)
+            cam_url = inference.gradcam_overlay_png(model, img, cam)
+        except Exception:  # Grad-CAM is an explanation aid; never fail the prediction because of it
+            log.exception("grad-cam failed")
     warnings = image_service.quality_warnings(img)
     return res, cam_url, warnings
 
@@ -65,6 +66,7 @@ async def create_prediction(gw: SupabaseGateway, settings: Settings, model: Load
         "confidence_score": round(res.confidence, 6),
         "is_confident": res.is_confident,
         "top_predictions": res.top_predictions,
+        "uncertainty_reasons": res.reasons,
         "disposal_instructions": guidance["disposal"],
         "safety_precautions": guidance["safety"],
         "recyclable": knowledge.is_recyclable(res.category),

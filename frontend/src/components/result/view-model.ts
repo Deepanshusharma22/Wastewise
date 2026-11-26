@@ -36,7 +36,7 @@ export function fromPrediction(p: PredictionResult): ResultVM {
 export function fromDetail(d: HistoryDetail, gradcam: string | null = null): ResultVM {
   return {
     id: d.id, createdAt: d.created_at, category: d.predicted_category, confidence: d.confidence,
-    isConfident: d.is_confident, reasons: [], top: d.top_predictions, item: d.predicted_item,
+    isConfident: d.is_confident, reasons: d.uncertainty_reasons ?? [], top: d.top_predictions, item: d.predicted_item,
     itemLabel: itemLabel(d.predicted_item), itemConfidence: null, guidance: d.guidance, notices: d.notices,
     quality: d.quality_warnings, imageUrl: d.image_url, gradcam, modelVersion: d.model_version,
     inferenceMs: d.inference_time_ms, feedback: d.feedback,

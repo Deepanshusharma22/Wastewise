@@ -120,10 +120,16 @@ def make_token(sub: str, *, exp_in: int = 3600, aud: str = "authenticated", role
 MODEL_DIR = Path(tempfile.mkdtemp(prefix="ww_model_"))
 TINY_CARD = _build_tiny_model(MODEL_DIR)
 os.environ.update({
+    # The Supabase contract suite always runs in Supabase mode, even if backend/.env
+    # enables LOCAL_MODE for the demo. The local-mode suite lives in tests_local/.
+    "LOCAL_MODE": "0",
     "ENVIRONMENT": "test", "SUPABASE_URL": SUPABASE_URL, "SUPABASE_ANON_KEY": ANON,
     "SUPABASE_SERVICE_ROLE_KEY": SERVICE, "SUPABASE_JWKS": json.dumps(JWKS), "MODEL_DIR": str(MODEL_DIR),
     "CORS_ORIGINS": "http://localhost:3000", "PREDICT_RATE_PER_MINUTE": "1000", "PREDICT_RATE_PER_DAY": "100000",
 })
+
+# tests_local/ sets LOCAL_MODE=1 at import time; this suite must always be Supabase mode.
+os.environ["LOCAL_MODE"] = "0"
 
 import httpx  # noqa: E402
 import pytest  # noqa: E402

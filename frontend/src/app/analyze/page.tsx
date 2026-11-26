@@ -11,6 +11,7 @@ import { useAuth } from "@/components/auth-provider";
 import { useErrorMessage } from "@/components/error-state";
 import { stashGradcam } from "@/components/result/view-model";
 import { api } from "@/lib/api";
+import { normalizeImageToJpeg, HEIF_TYPES } from "@/lib/avatar";
 import { prepareUpload } from "@/lib/image";
 import { useI18n } from "@/lib/i18n/provider";
 import { checkFile } from "@/lib/validation";
@@ -34,9 +35,13 @@ export default function AnalyzePage() {
 
   const accept = useCallback((f: File | undefined | null) => {
     if (!f) return;
-    // Large files are fine here: they're downscaled before upload. Only reject wrong types / absurd sizes.
-    const p = checkFile({ type: f.type, size: Math.min(f.size, 1) });
-    if (p === "badType") { setProblem(t.analyze.badType); return; }
+    // Large files are fine here: they're downscaled before upload.
+    // HEIC/HEIF (iPhone default) is accepted and converted to JPEG below.
+    const heif = HEIF_TYPES.includes(f.type) || /\.hei[cf]$/i.test(f.name);
+    if (!heif) {
+      const p = checkFile({ type: f.type, size: Math.min(f.size, 1) });
+      if (p === "badType") { setProblem(t.analyze.badType); return; }
+    }
     if (f.size > 25 * 1024 * 1024) { setProblem(t.analyze.tooLarge); return; }
     setProblem(null);
     setFile(f);
@@ -47,7 +52,8 @@ export default function AnalyzePage() {
     if (!file) return;
     setBusy(true);
     try {
-      const upload = await prepareUpload(file);
+      const normalized = await normalizeImageToJpeg(file, 2048);
+      const upload = await prepareUpload(normalized);
       if (checkFile(upload) === "tooLarge") { setProblem(t.analyze.tooLarge); return; }
       const result = await api.predict(upload);
       stashGradcam(result.id, result.gradcam_image);

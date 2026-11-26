@@ -40,6 +40,9 @@ Detailed documentation:
 - [`docs/api_documentation.md`](docs/api_documentation.md)
 - [`docs/deployment.md`](docs/deployment.md)
 - [`docs/project_tracking.md`](docs/project_tracking.md)
+- [`docs/local-demo.md`](docs/local-demo.md) — run and log in without Supabase
+- [`docs/fixes-applied.md`](docs/fixes-applied.md) — bug fixes (login links, HEIC, avatars, CI)
+- [`docs/roadmap.md`](docs/roadmap.md) · [`docs/bugs-and-gaps.md`](docs/bugs-and-gaps.md)
 
 ## Repository layout
 
@@ -98,7 +101,26 @@ How the deployed model is chosen:
 
 ## Quick start
 
-### 1. API
+### 0. Just run it (no Supabase account needed)
+
+`LOCAL_MODE=1` replaces Supabase with SQLite + filesystem storage + built-in auth, using
+the **same** code paths (and the real ONNX model). Confirmation links are shown in the UI
+instead of emailed, so the whole product is clickable from a clean checkout:
+
+```bash
+cd backend && python -m venv .venv && . .venv/bin/activate && pip install -r requirements-dev.txt
+printf 'LOCAL_MODE=1\nMODEL_DIR=model_artifacts\nLOCAL_AUTO_CONFIRM=1\n' > .env
+uvicorn app.main:app --host 0.0.0.0 --port 8000      # http://localhost:8000/docs
+
+python ../scripts/seed_demo.py                       # demo@wastewise.local / waste1234
+
+cd ../frontend && npm ci && echo 'API_URL=http://localhost:8000' > .env.local && npm run dev
+```
+
+Full walkthrough: [`docs/local-demo.md`](docs/local-demo.md). Recent bug-fix log:
+[`docs/fixes-applied.md`](docs/fixes-applied.md).
+
+### 1. API (production, with Supabase)
 
 ```bash
 cd backend

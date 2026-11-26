@@ -39,7 +39,7 @@ export interface Feedback {
   user_correctness_feedback: boolean; corrected_category: Category | "other" | null; comments: string | null;
 }
 export interface HistoryDetail extends HistoryItem {
-  top_predictions: CategoryProbability[]; disposal_instructions: BilingualList; safety_precautions: BilingualList;
+  top_predictions: CategoryProbability[]; uncertainty_reasons?: string[]; disposal_instructions: BilingualList; safety_precautions: BilingualList;
   quality_warnings: QualityWarning[]; guidance: Guidance; notices: Notice[]; model_name: string;
   inference_time_ms: number | null; feedback: Feedback | null;
 }
@@ -62,4 +62,6 @@ export interface ModelInfo {
 export interface Profile {
   id: string; full_name: string | null; email: string | null; avatar_url: string | null;
   preferred_language: Lang; theme: "light" | "dark" | "system"; save_images: boolean;
+  /** Local mode only: a directly usable URL for the stored avatar. */
+  avatar_signed_url?: string | null;
 }

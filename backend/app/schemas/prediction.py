@@ -102,6 +102,7 @@ class HistoryPage(BaseModel):
 
 class HistoryDetail(HistoryItem):
     top_predictions: list[CategoryProbability]
+    uncertainty_reasons: list[str] = Field(default_factory=list)
     disposal_instructions: BilingualList
     safety_precautions: BilingualList
     quality_warnings: list[QualityWarning]

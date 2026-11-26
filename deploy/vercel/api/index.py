@@ -20,8 +20,9 @@ import time
 import urllib.request
 from pathlib import Path
 
-BUNDLE_URL = "https://github.com/Madhurchaudhary/Wastewise/archive/2e2567245aca94be92021cae98b1b0a1f1a02e38.tar.gz"
-BUNDLE_SHA256 = "183fcf7af0bae40c1144d02d433f71f5a223eedb2a67181483156b6088a70d97"
+# Regenerate with: python scripts/make_vercel_deploy.py api --bundle-url <URL> --bundle-sha256 <SHA>
+BUNDLE_URL = "https://github.com/Madhurchaudhary/Wastewise/archive/4381c9ae8f2644812ffb83e5e9d09f25d9781883.tar.gz"
+BUNDLE_SHA256 = ""  # must be filled by scripts/make_vercel_deploy.py (empty => refuse to start)
 TARGET = Path(tempfile.gettempdir()) / f"wastewise-{BUNDLE_SHA256[:16]}"
 
 _lock = threading.Lock()
@@ -30,6 +31,8 @@ _inner = None
 
 
 def _extract() -> None:
+    if not BUNDLE_SHA256:
+        raise RuntimeError("BUNDLE_SHA256 is empty: regenerate this file with scripts/make_vercel_deploy.py")
     tmp = TARGET.with_suffix(".tar.gz")
     TARGET.mkdir(parents=True, exist_ok=True)
     with urllib.request.urlopen(BUNDLE_URL, timeout=60) as r, open(tmp, "wb") as f:

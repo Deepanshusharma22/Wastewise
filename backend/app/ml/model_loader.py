@@ -76,6 +76,12 @@ def materialise_artifacts(model_dir: Path, base_url: str, card: dict) -> Path:
     return cache
 
 
+# ONNX Runtime sessions are thread-safe for Run(), but Grad-CAM reads the exported head
+# plus the feature map from the *same* call; serialising inference keeps latency
+# predictable on small instances (2 vCPU) and prevents memory spikes.
+inference_lock = threading.Lock()
+
+
 class ModelRegistry:
     """Thread-safe lazy singleton so the app (and serverless cold starts) load the model exactly once."""
 
